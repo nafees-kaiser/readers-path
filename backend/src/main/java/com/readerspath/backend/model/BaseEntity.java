@@ -1,18 +1,20 @@
 package com.readerspath.backend.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Setter
-@Getter
-@RequiredArgsConstructor
 @MappedSuperclass
-public abstract class BaseEntity <PK extends Serializable> {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class BaseEntity <PK extends Serializable>{
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private PK id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    PK id;
 }
