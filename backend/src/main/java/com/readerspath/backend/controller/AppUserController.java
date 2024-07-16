@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1")
 public class AppUserController {
@@ -17,9 +19,9 @@ public class AppUserController {
     public ResponseEntity<?> register(@RequestBody AppUserModel appUserModel) {
         try {
             String msg = appUserService.registrationService(appUserModel);
-            return new ResponseEntity<>(msg, HttpStatus.CREATED);
+            return new ResponseEntity<>(Map.of("message", msg), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -27,9 +29,9 @@ public class AppUserController {
     public ResponseEntity<?> login(@RequestBody AppUserModel appUserModel) {
         try {
             String msg = appUserService.loginService(appUserModel.getEmail(), appUserModel.getPassword());
-            return new ResponseEntity<>(msg, HttpStatus.OK);
+            return new ResponseEntity<>(Map.of("message", msg), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 }
