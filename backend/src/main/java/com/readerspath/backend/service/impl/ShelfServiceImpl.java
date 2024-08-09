@@ -40,4 +40,15 @@ public class ShelfServiceImpl implements ShelfService {
     public Shelf findShelfByAppUser(AppUser appUser) {
         return shelfRepository.findByAppUser(appUser);
     }
+
+    @Override
+    public Shelf getShelf(String email) {
+        AppUser appUser = appUserService.getAppUserByEmail(email);
+        return this.findShelfByAppUser(appUser);
+    }
+
+    @Override
+    public Shelf changeShelfState(Book book, String email) {
+        return null;
+    }
 }
