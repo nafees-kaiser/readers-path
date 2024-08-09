@@ -11,7 +11,7 @@ public interface AppUserService {
 
     Preference registrationService(Preference preference);
 
-    String loginService(String email, String password);
+    AppUser loginService(String email, String password);
 
     AppUser getAppUserByEmail(String email);
 }

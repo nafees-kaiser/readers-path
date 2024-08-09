@@ -10,8 +10,8 @@ import com.readerspath.backend.service.AuthorService;
 import com.readerspath.backend.service.CategoryService;
 import com.readerspath.backend.service.PreferenceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +29,19 @@ public class AppUserServiceImpl implements AppUserService {
     private CategoryService categoryService;
     @Autowired
     private AuthorService authorService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
 
     @Override
-    public AppUser addAppUser(AppUser appUser){
+    public AppUser addAppUser(AppUser appUser) {
         appUser.setRole("ROLE_USER");
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser);
     }
 
     @Override
-    public Preference registrationService(Preference preference){
+    public Preference registrationService(Preference preference) {
         AppUser appUser = addAppUser(preference.getAppUser());
         List<Category> categories = preference.getFavouriteCategories().stream()
                 .map(category -> categoryService.findCategoryByName(category.getName()))
@@ -51,22 +53,16 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public String loginService(String email, String password){
-        AppUser appUser = appUserRepository.findByEmail(email);
-        if(appUser == null){
-            throw new UsernameNotFoundException("Email is not registered. Need to register first");
-        } else{
-            if(!passwordEncoder.matches(password, appUser.getPassword())){
-                throw new BadCredentialsException("Login failed. Wrong password");
-            }
-            else{
-                return "Login successful";
-            }
-        }
+    public AppUser loginService(String email, String password) {
+//        String email = appUser.getEmail();
+//        String password = appUser.getPassword();
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+        authenticationManager.authenticate(authenticationToken);
+        return getAppUserByEmail(email);
     }
 
     @Override
-    public AppUser getAppUserByEmail(String email){
+    public AppUser getAppUserByEmail(String email) {
         return appUserRepository.findByEmail(email);
     }
 }
