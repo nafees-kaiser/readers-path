@@ -1,5 +1,6 @@
 package com.readerspath.backend.service.impl;
 
+import com.readerspath.backend.exception.UserNotFoundException;
 import com.readerspath.backend.model.AppUser;
 import com.readerspath.backend.model.Author;
 import com.readerspath.backend.model.Category;
@@ -62,7 +63,11 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser getAppUserByEmail(String email) {
-        return appUserRepository.findByEmail(email);
+    public AppUser getAppUserByEmail(String email) throws UserNotFoundException {
+        AppUser appUser = appUserRepository.findByEmail(email);
+        if (appUser == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        return appUser;
     }
 }

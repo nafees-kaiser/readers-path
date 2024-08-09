@@ -1,13 +1,12 @@
 package com.readerspath.backend.service.impl;
 
 import com.readerspath.backend.exception.BookAddFailedException;
-import com.readerspath.backend.model.Author;
-import com.readerspath.backend.model.Book;
-import com.readerspath.backend.model.Category;
-import com.readerspath.backend.model.LinksToBuy;
+import com.readerspath.backend.exception.BookNotFoundException;
+import com.readerspath.backend.model.*;
 import com.readerspath.backend.projection.BookView;
 import com.readerspath.backend.repository.BookRepository;
 import com.readerspath.backend.repository.LinksToBuyRepository;
+import com.readerspath.backend.service.AppUserService;
 import com.readerspath.backend.service.AuthorService;
 import com.readerspath.backend.service.BookService;
 import com.readerspath.backend.service.CategoryService;
@@ -27,13 +26,20 @@ public class BookServiceImpl implements BookService {
     private CategoryService categoryService;
     @Autowired
     private LinksToBuyRepository linksToBuyRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
-    public Book addBook(Book book) throws BookAddFailedException {
-        Author author = authorService.findAuthorByName(book.getAuthor().getName());
-        if (author == null) {
+    public Book addBook(String email, Book book) throws BookAddFailedException {
+        AppUser appUser = appUserService.getAppUserByEmail(email);
+        Author author = authorService.findAuthorByAppUser(appUser);
+        if (author == null && appUser.getRole().equals("ROLE_USER")) {
+            Author newAuthor = new Author(appUser.getName(), appUser);
+            author = authorService.addAuthor(newAuthor);
+        } else {
             author = authorService.addAuthor(book.getAuthor());
         }
+
         Category category = categoryService.findCategoryByName(book.getCategory().getName());
         if (category == null) {
             throw new BookAddFailedException("Unable to add book");
@@ -44,7 +50,7 @@ public class BookServiceImpl implements BookService {
         if (book.getLinks() != null && !book.getLinks().isEmpty()) {
             List<LinksToBuy> links = book.getLinks();
             links.forEach(link -> link.setBook(newBook));
-            links = linksToBuyRepository.saveAll(book.getLinks());
+            linksToBuyRepository.saveAll(book.getLinks());
         }
         return newBook;
     }
@@ -52,5 +58,32 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookView> getAllBooks() {
         return Convertion.convertToViewList(bookRepository.findAll(), BookView.class);
+    }
+
+    @Override
+    public Book findBookById(Long bookId) throws BookNotFoundException {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFoundException("Book not found"));
+    }
+
+    @Override
+    public Category addCategory(Category category) {
+        return categoryService.addCategory(category);
+    }
+
+    @Override
+    public List<Book> findMyBooks(String email) throws BookNotFoundException {
+        AppUser appUser = appUserService.getAppUserByEmail(email);
+        Author author = authorService.findAuthorByAppUser(appUser);
+        if (author == null) {
+            throw new BookNotFoundException("You don't have any book");
+        }
+        return bookRepository.findAllByAuthor(author);
+
+    }
+
+    @Override
+    public void deleteBookById(Long bookId) {
+        bookRepository.deleteById(bookId);
     }
 }

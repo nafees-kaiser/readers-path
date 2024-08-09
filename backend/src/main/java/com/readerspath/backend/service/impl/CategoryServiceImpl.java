@@ -13,8 +13,8 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public String addCategory(Category category) {
-        return "";
+    public Category addCategory(Category category) {
+        return categoryRepository.save(category);
     }
 
     @Override
