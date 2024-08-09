@@ -1,5 +1,6 @@
 package com.readerspath.backend.projection;
 
+import com.readerspath.backend.enums.ShelfState;
 import com.readerspath.backend.model.Category;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface BookView {
     List<QuestionariesView> getQuestionaries();
 
     String getOverAllRating();
+
+    ShelfState getState();
 }

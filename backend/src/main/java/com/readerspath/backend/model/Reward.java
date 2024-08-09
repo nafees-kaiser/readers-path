@@ -1,17 +1,15 @@
 package com.readerspath.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reward extends BaseEntity<Long>{
+@ToString
+public class Reward extends BaseEntity<Long> {
     @OneToOne
     @JoinColumn
     private AppUser appUser;
