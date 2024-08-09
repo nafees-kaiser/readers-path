@@ -12,13 +12,12 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorRepository authorRepository;
 
     @Override
-    public String addAuthor(Author author){
-        authorRepository.save(author);
-        return "Author created successfully";
+    public Author addAuthor(Author author) {
+        return authorRepository.save(author);
     }
 
     @Override
-    public Author findAuthorByName(String name){
+    public Author findAuthorByName(String name) {
         return authorRepository.findByName(name);
     }
 }
