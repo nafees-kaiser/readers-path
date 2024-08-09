@@ -1,5 +1,6 @@
 package com.readerspath.backend.service.impl;
 
+import com.readerspath.backend.model.AppUser;
 import com.readerspath.backend.model.Author;
 import com.readerspath.backend.repository.AuthorRepository;
 import com.readerspath.backend.service.AuthorService;
@@ -12,13 +13,17 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorRepository authorRepository;
 
     @Override
-    public String addAuthor(Author author){
-        authorRepository.save(author);
-        return "Author created successfully";
+    public Author addAuthor(Author author) {
+        return authorRepository.save(author);
     }
 
     @Override
-    public Author findAuthorByName(String name){
+    public Author findAuthorByName(String name) {
         return authorRepository.findByName(name);
+    }
+
+    @Override
+    public Author findAuthorByAppUser(AppUser appUser) {
+        return authorRepository.findByAppUser(appUser);
     }
 }

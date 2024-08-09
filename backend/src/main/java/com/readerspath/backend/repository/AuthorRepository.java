@@ -1,5 +1,6 @@
 package com.readerspath.backend.repository;
 
+import com.readerspath.backend.model.AppUser;
 import com.readerspath.backend.model.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     Author findByName(String name);
+
+    Author findByAppUser(AppUser appUser);
 }

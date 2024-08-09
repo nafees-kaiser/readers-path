@@ -1,17 +1,18 @@
 package com.readerspath.backend.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class LinksToBuy extends BaseEntity<Long>{
+@ToString
+public class LinksToBuy extends BaseEntity<Long> {
     private String link;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
