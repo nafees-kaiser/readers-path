@@ -1,10 +1,8 @@
 package com.readerspath.backend.model;
 
+import com.readerspath.backend.enums.ShelfState;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Book extends BaseEntity<Long> {
     private String title;
 
@@ -41,4 +40,7 @@ public class Book extends BaseEntity<Long> {
     private List<Questionaries> questionaries;
 
     private String overAllRating;
+
+    @Enumerated(EnumType.STRING)
+    private ShelfState state;
 }

@@ -1,10 +1,10 @@
 package com.readerspath.backend.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,7 +13,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Preference extends BaseEntity<Long>{
+@ToString
+public class Preference extends BaseEntity<Long> {
 
     @OneToOne(cascade = CascadeType.ALL)
     private AppUser appUser;

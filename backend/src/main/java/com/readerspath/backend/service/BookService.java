@@ -20,4 +20,6 @@ public interface BookService {
     void deleteBookById(Long bookId);
 
     void updateOverAllRating(Book book);
+
+    Book setState(Book book);
 }

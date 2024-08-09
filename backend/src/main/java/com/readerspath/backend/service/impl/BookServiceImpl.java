@@ -1,5 +1,6 @@
 package com.readerspath.backend.service.impl;
 
+import com.readerspath.backend.enums.ShelfState;
 import com.readerspath.backend.exception.BookAddFailedException;
 import com.readerspath.backend.exception.BookNotFoundException;
 import com.readerspath.backend.model.*;
@@ -101,6 +102,12 @@ public class BookServiceImpl implements BookService {
             bookRepository.save(book);
         }
 
+    }
+
+    @Override
+    public Book setState(Book book) {
+        book.setState(ShelfState.WISH_TO_READ);
+        return bookRepository.save(book);
     }
 
 
