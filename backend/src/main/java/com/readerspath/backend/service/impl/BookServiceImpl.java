@@ -86,4 +86,22 @@ public class BookServiceImpl implements BookService {
     public void deleteBookById(Long bookId) {
         bookRepository.deleteById(bookId);
     }
+
+    @Override
+    public void updateOverAllRating(Book book) {
+        List<ReviewsAndRating> reviewsAndRatings = book.getReviewsAndRating();
+        if (reviewsAndRatings != null && !reviewsAndRatings.isEmpty()) {
+            Double avg = 0.0;
+            for (ReviewsAndRating r : reviewsAndRatings) {
+                avg += Double.parseDouble(r.getRating());
+            }
+            ;
+            avg /= reviewsAndRatings.size();
+            book.setOverAllRating(Double.toString(avg));
+            bookRepository.save(book);
+        }
+
+    }
+
+
 }

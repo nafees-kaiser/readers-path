@@ -18,4 +18,6 @@ public interface BookService {
     List<Book> findMyBooks(String email);
 
     void deleteBookById(Long bookId);
+
+    void updateOverAllRating(Book book);
 }
