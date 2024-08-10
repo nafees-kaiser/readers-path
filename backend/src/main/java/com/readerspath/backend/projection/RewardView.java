@@ -5,7 +5,7 @@ public interface RewardView {
 
     AppUserView getAppUser();
 
-    Long getCompletedBooks();
+    String getCompletedBooksCount();
 
-    Long getCoins();
+    String getCoins();
 }
