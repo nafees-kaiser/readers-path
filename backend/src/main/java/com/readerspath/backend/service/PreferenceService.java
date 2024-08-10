@@ -10,4 +10,9 @@ import java.util.List;
 public interface PreferenceService {
 
     Preference addPreference(AppUser appUser, List<Category> categories, List<Author> authors);
+
+    //    Preference editPreference(Preference preference, AppUser appUser);
+    Preference editPreference(AppUser appUser, List<Category> categories, List<Author> authors);
+
+    Preference findPreferenceByAppUser(AppUser appUser);
 }

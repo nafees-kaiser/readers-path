@@ -26,8 +26,6 @@ public class Reward extends BaseEntity<Long> {
     @Column(columnDefinition = "bigint default 20")
     private Long coins;
 
-    //    @PostPersist
-//    @PostUpdate
     public void updateCoins() {
         if (this.completedBooks != null) {
             long inc = this.completedBooks.size() / BOOK_THRESHOLD;

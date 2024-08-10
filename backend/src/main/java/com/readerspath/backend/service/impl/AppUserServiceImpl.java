@@ -70,4 +70,30 @@ public class AppUserServiceImpl implements AppUserService {
         }
         return appUser;
     }
+
+    @Override
+    public Preference editPreference(Preference preference, String email) {
+        AppUser appUser = this.getAppUserByEmail(email);
+        List<Category> categories = null;
+        List<Author> authors = null;
+        if (preference.getFavouriteCategories() != null && !preference.getFavouriteCategories().isEmpty()) {
+            categories = preference.getFavouriteCategories().stream()
+                    .map(category -> categoryService.findCategoryByName(category.getName()))
+                    .toList();
+        }
+
+        if (preference.getFavouriteAuthors() != null && !preference.getFavouriteAuthors().isEmpty()) {
+            authors = preference.getFavouriteAuthors().stream()
+                    .map(author -> authorService.findAuthorByName(author.getName()))
+                    .toList();
+        }
+
+        return preferenceService.editPreference(appUser, categories, authors);
+    }
+
+    @Override
+    public Preference getPreference(String email) {
+        AppUser appUser = this.getAppUserByEmail(email);
+        return preferenceService.findPreferenceByAppUser(appUser);
+    }
 }

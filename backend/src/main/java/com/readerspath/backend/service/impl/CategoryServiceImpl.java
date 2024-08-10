@@ -6,6 +6,8 @@ import com.readerspath.backend.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -20,5 +22,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findCategoryByName(String name) {
         return categoryRepository.findByName(name);
+    }
+
+    @Override
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
     }
 }

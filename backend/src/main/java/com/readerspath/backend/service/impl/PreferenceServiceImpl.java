@@ -19,9 +19,32 @@ public class PreferenceServiceImpl implements PreferenceService {
     @Override
     public Preference addPreference(AppUser appUser, List<Category> categories, List<Author> authors) {
         Preference preference = new Preference(appUser, categories, authors);
-//        preference.setAppUser(appUser);
-//        preference.setFavouriteGenres(genres);
-//        preference.setFavouriteAuthors(authors);
         return preferenceRepository.save(preference);
+    }
+
+    @Override
+    public Preference editPreference(AppUser appUser, List<Category> categories, List<Author> authors) {
+        Preference newPreference = preferenceRepository.findByAppUser(appUser);
+        if (categories != null) {
+            newPreference.setFavouriteCategories(categories);
+        }
+
+        if (authors != null) {
+            newPreference.setFavouriteAuthors(authors);
+        }
+
+        try {
+            return preferenceRepository.save(newPreference);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+//        newPreference = preferenceRepository.save(newPreference);
+//        return newPreference;
+
+    }
+
+    @Override
+    public Preference findPreferenceByAppUser(AppUser appUser) {
+        return preferenceRepository.findByAppUser(appUser);
     }
 }
