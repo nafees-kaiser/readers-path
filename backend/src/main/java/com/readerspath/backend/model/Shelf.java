@@ -1,13 +1,8 @@
 package com.readerspath.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import com.readerspath.backend.enums.ShelfState;
+import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -15,20 +10,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "shelfUniqueConstraint",
+                columnNames = {"book_id", "app_user_id"}
+        )
+})
 public class Shelf extends BaseEntity<Long> {
-    @OneToMany
-    private List<Book> books;
+    @ManyToOne
+    @JoinColumn
+    private Book book;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     private AppUser appUser;
 
-    public void setBooks(Book book) {
-        if (this.books == null) {
-            books = new ArrayList<>();
-        }
-        if (!books.contains(book)) {
-            books.add(book);
-        }
-    }
+    @Enumerated(EnumType.STRING)
+    private ShelfState state;
 }

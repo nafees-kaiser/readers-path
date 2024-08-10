@@ -1,6 +1,5 @@
 package com.readerspath.backend.service.impl;
 
-import com.readerspath.backend.enums.ShelfState;
 import com.readerspath.backend.exception.BookAddFailedException;
 import com.readerspath.backend.exception.BookNotFoundException;
 import com.readerspath.backend.model.*;
@@ -38,7 +37,10 @@ public class BookServiceImpl implements BookService {
             Author newAuthor = new Author(appUser.getName(), appUser);
             author = authorService.addAuthor(newAuthor);
         } else {
-            author = authorService.addAuthor(book.getAuthor());
+            author = authorService.findAuthorByName(book.getAuthor().getName());
+            if (author == null) {
+                author = authorService.addAuthor(book.getAuthor());
+            }
         }
 
         Category category = categoryService.findCategoryByName(book.getCategory().getName());
@@ -103,12 +105,5 @@ public class BookServiceImpl implements BookService {
         }
 
     }
-
-    @Override
-    public Book setState(Book book) {
-        book.setState(ShelfState.WISH_TO_READ);
-        return bookRepository.save(book);
-    }
-
 
 }

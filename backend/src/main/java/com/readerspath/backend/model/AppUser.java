@@ -18,8 +18,8 @@ import java.util.List;
 @ToString
 @Entity
 public class AppUser extends BaseEntity<Long> implements Serializable, UserDetails {
-    @Column
     String name;
+    @Column(unique = true)
     String email;
     String password;
     String role;

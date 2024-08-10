@@ -1,6 +1,5 @@
 package com.readerspath.backend.model;
 
-import com.readerspath.backend.enums.ShelfState;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,8 +26,8 @@ public class Book extends BaseEntity<Long> {
     @ManyToOne
     @JoinColumn
     private Category category;
-
-    //    private String bookCover;
+    // TODO: image handle
+//       private String bookCover;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
     private List<LinksToBuy> links;
@@ -41,6 +40,4 @@ public class Book extends BaseEntity<Long> {
 
     private String overAllRating;
 
-    @Enumerated(EnumType.STRING)
-    private ShelfState state;
 }
