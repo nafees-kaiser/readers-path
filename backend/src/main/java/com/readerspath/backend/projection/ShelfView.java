@@ -1,11 +1,13 @@
 package com.readerspath.backend.projection;
 
-import java.util.List;
+import com.readerspath.backend.enums.ShelfState;
 
 public interface ShelfView {
     Long getId();
 
-    List<BookView> getBooks();
+    BookView getBook();
 
     AppUserView getAppUser();
+
+    ShelfState getState();
 }

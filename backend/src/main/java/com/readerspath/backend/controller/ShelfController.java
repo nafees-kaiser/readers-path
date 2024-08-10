@@ -1,6 +1,5 @@
 package com.readerspath.backend.controller;
 
-import com.readerspath.backend.model.Book;
 import com.readerspath.backend.model.Shelf;
 import com.readerspath.backend.projection.ShelfView;
 import com.readerspath.backend.service.ShelfService;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,9 +19,9 @@ public class ShelfController {
     private ShelfService shelfService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addShelf(@RequestBody Book book, @RequestHeader("email") String email) {
+    public ResponseEntity<?> addShelf(@RequestBody Shelf shelf, @RequestHeader("email") String email) {
         try {
-            Shelf shelf = shelfService.addToShelf(book, email);
+            shelf = shelfService.addToShelf(shelf, email);
             ShelfView shelfView = Convertion.covertToView(shelf, ShelfView.class);
             return new ResponseEntity<>(shelfView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -30,9 +30,9 @@ public class ShelfController {
     }
 
     @PutMapping("/change-state")
-    public ResponseEntity<?> changeShelfState(@RequestBody Book book, @RequestHeader("email") String email) {
+    public ResponseEntity<?> changeShelfState(@RequestBody Shelf shelf, @RequestHeader("email") String email) {
         try {
-            Shelf shelf = shelfService.changeShelfState(book, email);
+            shelf = shelfService.changeShelfState(shelf, email);
             ShelfView shelfView = Convertion.covertToView(shelf, ShelfView.class);
             return new ResponseEntity<>(shelfView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -40,12 +40,22 @@ public class ShelfController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getShelf(@RequestHeader("email") String email) {
         try {
-            Shelf shelf = shelfService.getShelf(email);
-            ShelfView shelfView = Convertion.covertToView(shelf, ShelfView.class);
-            return new ResponseEntity<>(shelfView, HttpStatus.CREATED);
+            List<Shelf> shelfList = shelfService.getShelf(email);
+            List<ShelfView> shelfViewList = Convertion.convertToViewList(shelfList, ShelfView.class);
+            return new ResponseEntity<>(shelfViewList, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteShelf(@PathVariable("id") Long id) {
+        try {
+            shelfService.deleteShelf(id);
+            return new ResponseEntity<>(Map.of("message", "Book deleted successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }

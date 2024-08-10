@@ -15,9 +15,11 @@ import lombok.*;
 public class Questionaries extends BaseEntity<Long> {
     private String question;
     private String answer;
+
     @ManyToOne
     @JoinColumn
     private AppUser askedBy;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Book book;
