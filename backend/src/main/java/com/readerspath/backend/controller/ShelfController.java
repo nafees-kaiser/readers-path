@@ -19,9 +19,9 @@ public class ShelfController {
     private ShelfService shelfService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addShelf(@RequestBody Shelf shelf, @RequestHeader("email") String email) {
+    public ResponseEntity<?> addShelf(@RequestBody Shelf shelf) {
         try {
-            shelf = shelfService.addToShelf(shelf, email);
+            shelf = shelfService.addToShelf(shelf);
             ShelfView shelfView = Convertion.covertToView(shelf, ShelfView.class);
             return new ResponseEntity<>(shelfView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -30,9 +30,9 @@ public class ShelfController {
     }
 
     @PutMapping("/change-state")
-    public ResponseEntity<?> changeShelfState(@RequestBody Shelf shelf, @RequestHeader("email") String email) {
+    public ResponseEntity<?> changeShelfState(@RequestBody Shelf shelf) {
         try {
-            shelf = shelfService.changeShelfState(shelf, email);
+            shelf = shelfService.changeShelfState(shelf);
             ShelfView shelfView = Convertion.covertToView(shelf, ShelfView.class);
             return new ResponseEntity<>(shelfView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -41,9 +41,9 @@ public class ShelfController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getShelf(@RequestHeader("email") String email) {
+    public ResponseEntity<?> getShelf() {
         try {
-            List<Shelf> shelfList = shelfService.getShelf(email);
+            List<Shelf> shelfList = shelfService.getShelf();
             List<ShelfView> shelfViewList = Convertion.convertToViewList(shelfList, ShelfView.class);
             return new ResponseEntity<>(shelfViewList, HttpStatus.CREATED);
         } catch (Exception e) {

@@ -26,8 +26,8 @@ public class ShelfServiceImpl implements ShelfService {
     private AppUserService appUserService;
 
     @Override
-    public Shelf addToShelf(Shelf shelf, String email) {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public Shelf addToShelf(Shelf shelf) {
+        AppUser appUser = appUserService.getAppUserFromSession();
         Book book = bookService.findBookById(shelf.getBook().getId());
         shelf.setBook(book);
         shelf.setAppUser(appUser);
@@ -41,8 +41,8 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public List<Shelf> getShelf(String email) {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public List<Shelf> getShelf() {
+        AppUser appUser = appUserService.getAppUserFromSession();
         return this.findShelfByAppUser(appUser);
     }
 
@@ -53,7 +53,7 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public Shelf changeShelfState(Shelf shelf, String email) {
+    public Shelf changeShelfState(Shelf shelf) {
         Shelf toUpdateShelf = this.findShelfById(shelf.getId());
         toUpdateShelf.setState(shelf.getState());
         return shelfRepository.save(toUpdateShelf);
