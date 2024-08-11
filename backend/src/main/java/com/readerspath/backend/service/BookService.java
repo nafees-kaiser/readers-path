@@ -6,6 +6,7 @@ import com.readerspath.backend.model.Category;
 import com.readerspath.backend.projection.BookView;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BookService {
     Book addBook(String email, Book book);
@@ -21,4 +22,6 @@ public interface BookService {
     void deleteBookById(Long bookId);
 
     void updateOverAllRating(Book book);
+
+    Book editBook(Map<String, Object> updates);
 }
