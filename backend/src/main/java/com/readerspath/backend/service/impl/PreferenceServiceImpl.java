@@ -55,8 +55,8 @@ public class PreferenceServiceImpl implements PreferenceService {
     }
 
     @Override
-    public Preference getPreference(String email) {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public Preference getPreference() {
+        AppUser appUser = appUserService.getAppUserFromSession();
         return this.findPreferenceByAppUser(appUser);
     }
 
