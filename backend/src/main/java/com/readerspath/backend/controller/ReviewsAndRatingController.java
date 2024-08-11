@@ -7,7 +7,10 @@ import com.readerspath.backend.util.Convertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -18,9 +21,9 @@ public class ReviewsAndRatingController {
     private ReviewsAndRatingService reviewsAndRatingService;
 
     @PostMapping("/add-review")
-    public ResponseEntity<?> addReview(@RequestHeader("email") String email, @RequestBody ReviewsAndRating review) {
+    public ResponseEntity<?> addReview(@RequestBody ReviewsAndRating review) {
         try {
-            ReviewsAndRating reviewsAndRating = reviewsAndRatingService.addReview(email, review);
+            ReviewsAndRating reviewsAndRating = reviewsAndRatingService.addReview(review);
             ReviewsAndRatingView reviewsAndRatingView = Convertion.covertToView(reviewsAndRating, ReviewsAndRatingView.class);
             return new ResponseEntity<>(reviewsAndRatingView, HttpStatus.CREATED);
         } catch (Exception e) {

@@ -22,8 +22,8 @@ public class ReviewsAndRatingServiceImpl implements ReviewsAndRatingService {
     private AppUserService appUserService;
 
     @Override
-    public ReviewsAndRating addReview(String email, ReviewsAndRating review) {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public ReviewsAndRating addReview(ReviewsAndRating review) {
+        AppUser appUser = appUserService.getAppUserFromSession();
         Book book = bookService.findBookById(review.getBook().getId());
         review.setBook(book);
         review.setAppUser(appUser);
