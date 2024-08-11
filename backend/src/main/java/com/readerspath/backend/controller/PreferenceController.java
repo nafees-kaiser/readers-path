@@ -7,6 +7,7 @@ import com.readerspath.backend.projection.PreferenceView;
 import com.readerspath.backend.service.AppUserService;
 import com.readerspath.backend.service.AuthorService;
 import com.readerspath.backend.service.CategoryService;
+import com.readerspath.backend.service.PreferenceService;
 import com.readerspath.backend.util.Convertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,9 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class PreferenceController {
     @Autowired
+    private PreferenceService preferenceService;
+
+    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -27,6 +31,17 @@ public class PreferenceController {
 
     @Autowired
     private AppUserService appUserService;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Preference preference) {
+        try {
+            preference = preferenceService.register(preference);
+            PreferenceView preferenceView = Convertion.covertToView(preference, PreferenceView.class);
+            return new ResponseEntity<>(preferenceView, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/category")
     public ResponseEntity<?> getCategories() {
@@ -49,9 +64,9 @@ public class PreferenceController {
     }
 
     @PutMapping("/user/edit-preference")
-    public ResponseEntity<?> editPreference(@RequestBody Preference preference, @RequestHeader("email") String email) {
+    public ResponseEntity<?> editPreference(@RequestBody Map<String, Object> updates, @RequestHeader("email") String email) {
         try {
-            preference = appUserService.editPreference(preference, email);
+            Preference preference = preferenceService.editPreference(updates);
             PreferenceView preferenceView = Convertion.covertToView(preference, PreferenceView.class);
             return new ResponseEntity<>(preferenceView, HttpStatus.OK);
         } catch (Exception e) {
@@ -62,7 +77,7 @@ public class PreferenceController {
     @GetMapping("/user/preference")
     public ResponseEntity<?> getPreference(@RequestHeader("email") String email) {
         try {
-            Preference preference = appUserService.getPreference(email);
+            Preference preference = preferenceService.getPreference(email);
             PreferenceView preferenceView = Convertion.covertToView(preference, PreferenceView.class);
             return new ResponseEntity<>(preferenceView, HttpStatus.OK);
         } catch (Exception e) {
