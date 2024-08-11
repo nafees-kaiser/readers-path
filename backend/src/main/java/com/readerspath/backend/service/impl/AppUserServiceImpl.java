@@ -2,11 +2,15 @@ package com.readerspath.backend.service.impl;
 
 import com.readerspath.backend.exception.UserNotFoundException;
 import com.readerspath.backend.model.AppUser;
+import com.readerspath.backend.model.LoginResponse;
 import com.readerspath.backend.repository.AppUserRepository;
 import com.readerspath.backend.service.AppUserService;
+import com.readerspath.backend.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,9 @@ public class AppUserServiceImpl implements AppUserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtTokenService jwtTokenService;
+
     @Override
     public AppUser addAppUser(AppUser appUser) {
         appUser.setRole("ROLE_USER");
@@ -29,12 +36,30 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser loginService(String email, String password) {
-//        String email = appUser.getEmail();
-//        String password = appUser.getPassword();
+    public LoginResponse loginService(String email, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         authenticationManager.authenticate(authenticationToken);
-        return getAppUserByEmail(email);
+        String token = jwtTokenService.createToken(email);
+        String role = getAppUserByEmail(email).getRole();
+        return new LoginResponse(token, role, jwtTokenService.getExpirationDateFromToken(token));
+    }
+
+    @Override
+    public AppUser getAppUserFromSession() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) authentication.getPrincipal();
+        return this.getAppUserByEmail(email);
+    }
+
+    @Override
+    public AppUser getAppUserFromToken(String token) {
+        String email = jwtTokenService.getUsernameFromToken(token.substring(7));
+        if (email != null) {
+            return this.getAppUserByEmail(email);
+        } else {
+            throw new UserNotFoundException("User is not verified");
+        }
+
     }
 
     @Override
