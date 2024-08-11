@@ -59,8 +59,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookView> getAllBooks() {
-        return Convertion.convertToViewList(bookRepository.findAll(), BookView.class);
+    public List<BookView> getAllBooks(BookFilterReq req) {
+        List<Book> books = bookRepository.filterBooks(req);
+        return Convertion.convertToViewList(books, BookView.class);
     }
 
     @Override
