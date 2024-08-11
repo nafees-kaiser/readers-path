@@ -27,11 +27,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> {
-//                    req.requestMatchers("/api/v1/register", "/api/v1/login", "/api/v1/books/all", "/api/v1/books/{id}").permitAll()
-//                            .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
-//                            .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
-//                            .anyRequest().authenticated();
-                    req.requestMatchers("/api/v1/**").permitAll();
+                    req.requestMatchers("/api/v1/register",
+                                    "/api/v1/login",
+                                    "/api/v1/books/all",
+                                    "/api/v1/books/{id}",
+                                    "/api/v1/category",
+                                    "/api/v1/author").permitAll()
+                            .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
+                            .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
+                            .anyRequest().authenticated();
+//                    req.requestMatchers("/api/v1/**").permitAll();
                 })
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)

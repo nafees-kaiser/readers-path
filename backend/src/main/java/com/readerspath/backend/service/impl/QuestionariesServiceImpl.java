@@ -23,8 +23,8 @@ public class QuestionariesServiceImpl implements QuestionariesService {
     private BookService bookService;
 
     @Override
-    public Questionaries addQuestionaries(Questionaries questionaries, String email) {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public Questionaries addQuestionaries(Questionaries questionaries) {
+        AppUser appUser = appUserService.getAppUserFromSession();
         questionaries.setAskedBy(appUser);
         Book book = bookService.findBookById(questionaries.getBook().getId());
         questionaries.setBook(book);
@@ -32,7 +32,7 @@ public class QuestionariesServiceImpl implements QuestionariesService {
     }
 
     @Override
-    public Questionaries addAnswers(Questionaries questionaries, String email) {
+    public Questionaries addAnswers(Questionaries questionaries) {
         Questionaries newQuestionaries = this.findById(questionaries.getId());
         newQuestionaries.setAnswer(questionaries.getAnswer());
         return questionariesRepository.save(newQuestionaries);

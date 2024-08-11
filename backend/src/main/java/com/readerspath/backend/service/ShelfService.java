@@ -6,15 +6,15 @@ import com.readerspath.backend.model.Shelf;
 import java.util.List;
 
 public interface ShelfService {
-    Shelf addToShelf(Shelf shelf, String email);
+    Shelf addToShelf(Shelf shelf);
 
     List<Shelf> findShelfByAppUser(AppUser appUser);
 
-    List<Shelf> getShelf(String email);
+    List<Shelf> getShelf();
 
     Shelf findShelfById(Long id);
 
-    Shelf changeShelfState(Shelf shelf, String email);
+    Shelf changeShelfState(Shelf shelf);
 
     void deleteShelf(Long id);
 }

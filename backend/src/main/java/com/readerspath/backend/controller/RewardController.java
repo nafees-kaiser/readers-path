@@ -19,9 +19,9 @@ public class RewardController {
     private RewardService rewardService;
 
     @PostMapping("/complete-book")
-    public ResponseEntity<?> completeBook(@RequestBody Book book, @RequestHeader("email") String email) {
+    public ResponseEntity<?> completeBook(@RequestBody Book book) {
         try {
-            Reward reward = rewardService.completeBook(book, email);
+            Reward reward = rewardService.completeBook(book);
             RewardView rewardView = Convertion.covertToView(reward, RewardView.class);
             return new ResponseEntity<>(rewardView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -30,9 +30,9 @@ public class RewardController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getReward(@RequestHeader("email") String email) {
+    public ResponseEntity<?> getReward() {
         try {
-            Reward reward = rewardService.getReward(email);
+            Reward reward = rewardService.getReward();
             RewardView rewardView = Convertion.covertToView(reward, RewardView.class);
             return new ResponseEntity<>(rewardView, HttpStatus.CREATED);
         } catch (Exception e) {

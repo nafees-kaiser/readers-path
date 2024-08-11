@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface BookService {
-    Book addBook(String email, Book book);
+    Book addBook(Book book);
 
     List<BookView> getAllBooks(BookFilterReq req);
 
@@ -17,7 +17,7 @@ public interface BookService {
 
     Category addCategory(Category category);
 
-    List<Book> findMyBooks(String email);
+    List<Book> findMyBooks();
 
     void deleteBookById(Long bookId);
 

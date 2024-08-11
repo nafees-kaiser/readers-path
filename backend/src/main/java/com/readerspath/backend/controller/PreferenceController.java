@@ -3,8 +3,8 @@ package com.readerspath.backend.controller;
 import com.readerspath.backend.model.Author;
 import com.readerspath.backend.model.Category;
 import com.readerspath.backend.model.Preference;
+import com.readerspath.backend.projection.AuthorView;
 import com.readerspath.backend.projection.PreferenceView;
-import com.readerspath.backend.service.AppUserService;
 import com.readerspath.backend.service.AuthorService;
 import com.readerspath.backend.service.CategoryService;
 import com.readerspath.backend.service.PreferenceService;
@@ -28,9 +28,6 @@ public class PreferenceController {
 
     @Autowired
     private AuthorService authorService;
-
-    @Autowired
-    private AppUserService appUserService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Preference preference) {
@@ -56,8 +53,9 @@ public class PreferenceController {
     @GetMapping("/author")
     public ResponseEntity<?> getAuthors() {
         try {
-            List<Author> categories = authorService.getAuthors();
-            return new ResponseEntity<>(categories, HttpStatus.OK);
+            List<Author> authors = authorService.getAuthors();
+            List<AuthorView> authorViews = Convertion.convertToViewList(authors, AuthorView.class);
+            return new ResponseEntity<>(authorViews, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -75,9 +73,9 @@ public class PreferenceController {
     }
 
     @GetMapping("/user/preference")
-    public ResponseEntity<?> getPreference(@RequestHeader("email") String email) {
+    public ResponseEntity<?> getPreference() {
         try {
-            Preference preference = preferenceService.getPreference(email);
+            Preference preference = preferenceService.getPreference();
             PreferenceView preferenceView = Convertion.covertToView(preference, PreferenceView.class);
             return new ResponseEntity<>(preferenceView, HttpStatus.OK);
         } catch (Exception e) {

@@ -33,6 +33,7 @@ public class Book extends BaseEntity<Long> {
     private List<LinksToBuy> links;
 
     @OneToMany(cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<ReviewsAndRating> reviewsAndRating;
 
     @OneToMany(cascade = CascadeType.ALL)

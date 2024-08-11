@@ -1,6 +1,5 @@
 package com.readerspath.backend.service.impl;
 
-import com.readerspath.backend.exception.BookNotFoundException;
 import com.readerspath.backend.model.AppUser;
 import com.readerspath.backend.model.Book;
 import com.readerspath.backend.model.Reward;
@@ -23,8 +22,8 @@ public class RewardServiceImpl implements RewardService {
     private AppUserService appUserService;
 
     @Override
-    public Reward completeBook(Book book, String email) {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public Reward completeBook(Book book) {
+        AppUser appUser = appUserService.getAppUserFromSession();
         Reward reward = this.findRewardByAppUser(appUser);
         if (reward == null) {
             reward = new Reward();
@@ -39,12 +38,12 @@ public class RewardServiceImpl implements RewardService {
     @Override
     public Reward findRewardByAppUser(AppUser appUser) {
         return rewardRepository.findByAppUser(appUser)
-                .orElseThrow(() -> new BookNotFoundException("Book is not completed"));
+                .orElse(null);
     }
 
     @Override
-    public Reward getReward(String email) {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public Reward getReward() {
+        AppUser appUser = appUserService.getAppUserFromSession();
         return this.findRewardByAppUser(appUser);
     }
 }

@@ -19,5 +19,5 @@ public interface PreferenceService {
 
     Preference findPreferenceByAppUser(AppUser appUser);
 
-    Preference getPreference(String email);
+    Preference getPreference();
 }
