@@ -1,6 +1,7 @@
 package com.readerspath.backend.controller;
 
 import com.readerspath.backend.model.Book;
+import com.readerspath.backend.model.BookFilterReq;
 import com.readerspath.backend.model.Category;
 import com.readerspath.backend.projection.BookView;
 import com.readerspath.backend.service.BookService;
@@ -19,10 +20,10 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-    @GetMapping("/books/all")
-    public ResponseEntity<?> getAllBooks() {
+    @PostMapping("/books/all")
+    public ResponseEntity<?> getAllBooks(@RequestBody BookFilterReq req) {
         try {
-            List<BookView> books = bookService.getAllBooks();
+            List<BookView> books = bookService.getAllBooks(req);
             return new ResponseEntity<>(books, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -79,6 +80,17 @@ public class BookController {
         try {
             bookService.deleteBookById(bookId);
             return new ResponseEntity<>(Map.of("message", "Book deleted successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/user/my-books/edit")
+    public ResponseEntity<?> editBook2(@RequestBody Map<String, Object> updates) {
+        try {
+            Book book = bookService.editBook(updates);
+            BookView bookView = Convertion.covertToView(book, BookView.class);
+            return new ResponseEntity<>(bookView, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
