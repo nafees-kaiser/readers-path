@@ -7,7 +7,10 @@ import com.readerspath.backend.util.Convertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -18,9 +21,9 @@ public class QuestionariesController {
     private QuestionariesService questionariesService;
 
     @PostMapping("/add-ques")
-    public ResponseEntity<?> addQuestionaries(@RequestBody Questionaries questionaries, @RequestHeader("email") String email) {
+    public ResponseEntity<?> addQuestionaries(@RequestBody Questionaries questionaries) {
         try {
-            questionaries = questionariesService.addQuestionaries(questionaries, email);
+            questionaries = questionariesService.addQuestionaries(questionaries);
             QuestionariesView questionariesView = Convertion.covertToView(questionaries, QuestionariesView.class);
             return new ResponseEntity<>(questionariesView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -29,9 +32,9 @@ public class QuestionariesController {
     }
 
     @PostMapping("/add-ans")
-    public ResponseEntity<?> addAnswers(@RequestBody Questionaries questionaries, @RequestHeader("email") String email) {
+    public ResponseEntity<?> addAnswers(@RequestBody Questionaries questionaries) {
         try {
-            questionaries = questionariesService.addAnswers(questionaries, email);
+            questionaries = questionariesService.addAnswers(questionaries);
             QuestionariesView questionariesView = Convertion.covertToView(questionaries, QuestionariesView.class);
             return new ResponseEntity<>(questionariesView, HttpStatus.CREATED);
         } catch (Exception e) {
