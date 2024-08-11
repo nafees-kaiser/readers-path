@@ -29,13 +29,13 @@ public class Book extends BaseEntity<Long> {
     // TODO: image handle
 //       private String bookCover;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<LinksToBuy> links;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ReviewsAndRating> reviewsAndRating;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Questionaries> questionaries;
 
     private String overAllRating;

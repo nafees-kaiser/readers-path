@@ -84,4 +84,15 @@ public class BookController {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/user/my-books/edit")
+    public ResponseEntity<?> editBook2(@RequestBody Map<String, Object> updates) {
+        try {
+            Book book = bookService.editBook(updates);
+            BookView bookView = Convertion.covertToView(book, BookView.class);
+            return new ResponseEntity<>(bookView, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
