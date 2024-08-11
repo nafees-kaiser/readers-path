@@ -46,8 +46,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book addBook(String email, Book book) throws BookAddFailedException {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public Book addBook(Book book) throws BookAddFailedException {
+        AppUser appUser = appUserService.getAppUserFromSession();
         Author author = authorService.findAuthorByAppUser(appUser);
         if (author == null && appUser.getRole().equals("ROLE_USER")) {
             Author newAuthor = new Author(appUser.getName(), appUser);
@@ -90,8 +90,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findMyBooks(String email) throws BookNotFoundException {
-        AppUser appUser = appUserService.getAppUserByEmail(email);
+    public List<Book> findMyBooks() throws BookNotFoundException {
+        AppUser appUser = appUserService.getAppUserFromSession();
         Author author = authorService.findAuthorByAppUser(appUser);
         if (author == null) {
             throw new BookNotFoundException("You don't have any book");
@@ -102,7 +102,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBookById(Long bookId) {
-        bookRepository.deleteById(bookId);
+        Book book = findBookById(bookId);
+        book.setLinks(null);
+        bookRepository.save(book);
+        bookRepository.delete(book);
     }
 
     @Override

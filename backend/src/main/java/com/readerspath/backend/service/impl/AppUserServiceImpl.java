@@ -47,7 +47,13 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser getAppUserFromSession() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new UserNotFoundException("User not found");
+        }
         String email = (String) authentication.getPrincipal();
+        if (email == null) {
+            throw new UserNotFoundException("User not found");
+        }
         return this.getAppUserByEmail(email);
     }
 

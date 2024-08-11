@@ -44,9 +44,9 @@ public class BookController {
     }
 
     @PostMapping({"/user/add-book", "/admin/add-book"})
-    public ResponseEntity<?> addBook(@RequestHeader("email") String email, @RequestBody Book book) {
+    public ResponseEntity<?> addBook(@RequestBody Book book) {
         try {
-            book = bookService.addBook(email, book);
+            book = bookService.addBook(book);
             BookView bookView = Convertion.covertToView(book, BookView.class);
             return new ResponseEntity<>(bookView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class BookController {
     }
 
     @PostMapping("/admin/add-category")
-    public ResponseEntity<?> addCategory(@RequestHeader("email") String email, @RequestBody Category category) {
+    public ResponseEntity<?> addCategory(@RequestBody Category category) {
         try {
             category = bookService.addCategory(category);
             return new ResponseEntity<>(category, HttpStatus.CREATED);
@@ -65,9 +65,9 @@ public class BookController {
     }
 
     @GetMapping("/user/my-books")
-    public ResponseEntity<?> getMyBooks(@RequestHeader("email") String email) {
+    public ResponseEntity<?> getMyBooks() {
         try {
-            List<Book> books = bookService.findMyBooks(email);
+            List<Book> books = bookService.findMyBooks();
             List<BookView> bookViews = Convertion.convertToViewList(books, BookView.class);
             return new ResponseEntity<>(bookViews, HttpStatus.OK);
         } catch (Exception e) {
@@ -86,7 +86,7 @@ public class BookController {
     }
 
     @PutMapping("/user/my-books/edit")
-    public ResponseEntity<?> editBook2(@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<?> editBook(@RequestBody Map<String, Object> updates) {
         try {
             Book book = bookService.editBook(updates);
             BookView bookView = Convertion.covertToView(book, BookView.class);
