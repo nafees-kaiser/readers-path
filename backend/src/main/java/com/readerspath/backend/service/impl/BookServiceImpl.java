@@ -6,14 +6,13 @@ import com.readerspath.backend.model.*;
 import com.readerspath.backend.projection.BookView;
 import com.readerspath.backend.repository.BookRepository;
 import com.readerspath.backend.repository.LinksToBuyRepository;
-import com.readerspath.backend.service.AppUserService;
-import com.readerspath.backend.service.AuthorService;
-import com.readerspath.backend.service.BookService;
-import com.readerspath.backend.service.CategoryService;
+import com.readerspath.backend.service.*;
 import com.readerspath.backend.util.Convertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,9 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private AppUserService appUserService;
 
+    @Autowired
+    private ImageService imageService;
+
     private List<LinksToBuy> addLinksToBuy(List<LinksToBuy> linksToBuyList) {
         return linksToBuyList.stream().map(link -> {
             LinksToBuy newLink = linksToBuyRepository.findByLink(link.getLink());
@@ -46,7 +48,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book addBook(Book book) throws BookAddFailedException {
+    public Book addBook(Book book, MultipartFile file) throws BookAddFailedException, IOException {
         AppUser appUser = appUserService.getAppUserFromSession();
         Author author = authorService.findAuthorByAppUser(appUser);
         if (author == null && appUser.getRole().equals("ROLE_USER")) {
@@ -68,6 +70,10 @@ public class BookServiceImpl implements BookService {
         if (book.getLinks() != null && !book.getLinks().isEmpty()) {
             List<LinksToBuy> links = this.addLinksToBuy(book.getLinks());
             book.setLinks(links);
+        }
+        if (file != null) {
+            Image image = imageService.saveImage(file);
+            book.setCoverImage(image);
         }
         return bookRepository.save(book);
     }
@@ -104,6 +110,8 @@ public class BookServiceImpl implements BookService {
     public void deleteBookById(Long bookId) {
         Book book = findBookById(bookId);
         book.setLinks(null);
+        book.setCoverImage(null);
+        imageService.deleteImage(book.getCoverImage());
         bookRepository.save(book);
         bookRepository.delete(book);
     }
@@ -125,7 +133,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book editBook(Map<String, Object> updates) {
+    public Book editBook(Map<String, Object> updates, MultipartFile file) throws IOException {
 //        Book book = this.findBookById(id);
         Book book = this.findBookById(Long.valueOf((int) updates.get("id")));
 
@@ -176,6 +184,7 @@ public class BookServiceImpl implements BookService {
                 }
             }
         });
+        imageService.editImage(book.getCoverImage(), file);
         return bookRepository.save(book);
     }
 
