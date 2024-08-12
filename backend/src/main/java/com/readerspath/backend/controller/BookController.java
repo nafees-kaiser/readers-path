@@ -6,10 +6,13 @@ import com.readerspath.backend.model.Category;
 import com.readerspath.backend.projection.BookView;
 import com.readerspath.backend.service.BookService;
 import com.readerspath.backend.util.Convertion;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class BookController {
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
     @PostMapping("/books/all")
     public ResponseEntity<?> getAllBooks(@RequestBody BookFilterReq req) {
@@ -43,10 +46,10 @@ public class BookController {
 
     }
 
-    @PostMapping({"/user/add-book", "/admin/add-book"})
-    public ResponseEntity<?> addBook(@RequestBody Book book) {
+    @PostMapping(value = {"/user/add-book", "/admin/add-book"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addBook(@RequestPart("book") Book book, @RequestPart("coverImage") @Nullable MultipartFile file) {
         try {
-            book = bookService.addBook(book);
+            book = bookService.addBook(book, file);
             BookView bookView = Convertion.covertToView(book, BookView.class);
             return new ResponseEntity<>(bookView, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -85,10 +88,10 @@ public class BookController {
         }
     }
 
-    @PutMapping("/user/my-books/edit")
-    public ResponseEntity<?> editBook(@RequestBody Map<String, Object> updates) {
+    @PutMapping(value = {"/user/my-books/edit", "/admin/edit-book"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> editBook(@RequestPart("book") Map<String, Object> updates, @RequestPart("coverImage") @Nullable MultipartFile file) {
         try {
-            Book book = bookService.editBook(updates);
+            Book book = bookService.editBook(updates, file);
             BookView bookView = Convertion.covertToView(book, BookView.class);
             return new ResponseEntity<>(bookView, HttpStatus.OK);
         } catch (Exception e) {

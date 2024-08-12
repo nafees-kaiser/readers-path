@@ -26,17 +26,19 @@ public class Book extends BaseEntity<Long> {
     @ManyToOne
     @JoinColumn
     private Category category;
-    // TODO: image handle
-//       private String bookCover;
+
+    @OneToOne
+    @JoinColumn
+    private Image coverImage;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<LinksToBuy> links;
 
-    @OneToMany(cascade = CascadeType.ALL)
-//    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    //    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<ReviewsAndRating> reviewsAndRating;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Questionaries> questionaries;
 
     private String overAllRating;

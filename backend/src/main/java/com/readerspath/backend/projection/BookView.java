@@ -28,4 +28,6 @@ public interface BookView {
     List<QuestionariesView> getQuestionaries();
 
     String getOverAllRating();
+
+    ImageView getCoverImage();
 }
