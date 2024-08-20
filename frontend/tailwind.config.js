@@ -14,7 +14,11 @@ module.exports = {
                 'tertiary-bg': '#E9E9E9',
                 'primary': '#116466',
                 'secondary': '#E64833',
-                'divider': '#DAD9D9'
+                'divider': '#DAD9D9',
+                'button-hover': '#FF7F6E',
+            },
+            screens: {
+                'xs': '375px',
             }
         },
     },
