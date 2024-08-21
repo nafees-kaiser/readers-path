@@ -24,7 +24,7 @@ const CategoryFilter = ({setIsCategoryModalOpen}) => {
                     <CheckBox content={"Thriller"}/>
                 </div>
             </div>
-            <Button className={"bg-secondary text-white w-fit"} content={"Apply"}/>
+            <Button className={"bg-secondary hover:bg-button-hover text-white"} content={"Apply"}/>
         </div>
     );
 };

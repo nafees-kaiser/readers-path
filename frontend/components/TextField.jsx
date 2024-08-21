@@ -1,4 +1,4 @@
-export default function TextField({type, name, placeholder, handleChange, label, value}) {
+export default function TextField({type = "text", name, placeholder, handleChange, label, value}) {
     return (
         <div className="w-full">
             <label className="font-bold text-sm md:text-lg" htmlFor={name}>{label}</label>
