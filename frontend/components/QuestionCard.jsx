@@ -2,7 +2,7 @@ import React from 'react';
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
 
-const QuestionCard = ({isAuthor = true}) => {
+const QuestionCard = ({isAuthor = false}) => {
     const ans = "null";
     return (
         <div className={"flex-col flex gap-2 p-2 border border-border rounded-lg md:p-4"}>
@@ -22,7 +22,7 @@ const QuestionCard = ({isAuthor = true}) => {
                         />
                         <Button
                             content={"Save"}
-                            className={"bg-secondary text-white"}
+                            className={"bg-secondary hover:bg-button-hover text-white"}
                         />
                     </div>
 

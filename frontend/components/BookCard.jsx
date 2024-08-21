@@ -26,8 +26,8 @@ const BookCard = ({state}) => {
                             <div>ISBN: 9847010501131</div>
                         </div>
                         <div className={"flex flex-col gap-1.5"}>
-                            <div>edition</div>
-                            <div>pages</div>
+                            <div>2nd edition</div>
+                            <div>1000 pages</div>
                         </div>
                     </div>
                     <div className={"text-xs md:text-base text-light-text flex gap-1.5 items-center"}>

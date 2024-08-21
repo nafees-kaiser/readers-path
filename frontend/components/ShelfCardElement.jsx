@@ -10,7 +10,7 @@ const ShelfCardElement = () => {
                 <BookStateMenu/>
                 <Button
                     content={"Add review"}
-                    className={"w-fit bg-secondary hover:bg-button-hover text-white"}
+                    className={"bg-secondary hover:bg-button-hover text-white"}
                 />
             </div>
             <button className={'text-xl md:text-2xl text-light-text absolute right-0 bottom-0'}>
