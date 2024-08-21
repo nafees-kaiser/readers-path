@@ -1,5 +1,6 @@
-import BookInfoCard from "@/components/BookInfoCard";
-import AddBookLink from "@/components/AddBookLink";
+"use client"
+
+import ReviewCard from "@/components/ReviewCard";
 
 export default function Home() {
     return (
@@ -15,9 +16,13 @@ export default function Home() {
             {/*        suffixIcon={<FaArrowRight/>}/>*/}
             <div className={'mx-[10px]'}>
                 {/*<BookCard state={"shelf"}/>*/}
-                <BookInfoCard/>
+                {/*<BookInfoCard/>*/}
+                {/*<CustomRating*/}
+                {/*    stop={1}*/}
+                {/*    rating={1}*/}
+                {/*/>*/}
+                <ReviewCard/>
             </div>
-            <AddBookLink content={"hello"}/>
             {/*<div className={"absolute top-52 left-36"}>*/}
             {/*    <BookStateMenu/>*/}
             {/*</div>*/}
