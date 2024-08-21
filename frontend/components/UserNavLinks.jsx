@@ -4,7 +4,7 @@ import NavLink from "@/components/NavLink";
 
 const UserNavLinks = ({className}) => {
     return (
-        <ul className={`${className} text-sm md:text-base`}>
+        <ul className={`${className} text-sm lg:text-base`}>
             <NavLink
                 address={"/"}
                 content={"Home"}
