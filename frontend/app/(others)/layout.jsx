@@ -4,7 +4,7 @@ import UserNavbar from "@/components/UserNavbar";
 const MainLayout = ({children}) => {
     return (
         <section>
-            <UserNavbar/>
+            <UserNavbar isLoggedIn={true}/>
             {children}
         </section>
     );

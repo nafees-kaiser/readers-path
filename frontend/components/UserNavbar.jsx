@@ -7,27 +7,39 @@ import {PiBooksBold} from "react-icons/pi";
 import Link from "next/link";
 import {IoMenu} from "react-icons/io5";
 import UserNavLinks from "@/components/UserNavLinks";
+import ProfileModal from "@/components/ProfileModal";
 
 const UserNavbar = ({isLoggedIn = false}) => {
     const [navBar, setNavBar] = useState(false);
+    const [isProfileModalOpen, setProfileModalOpen] = useState(false);
     return (
-        <nav className={""}>
-            <div className={"bg-primary flex justify-between py-4 text-white px-[10px] md:px-[50px] lg:px-[100px]"}>
-                <div>
-                    <Image src={navbarLogo} alt={"Logo"} width={170}/>
+        <nav>
+            <div
+                className={"bg-primary flex justify-between items-center py-4 text-white px-[10px] md:px-[50px] lg:px-[100px]"}>
+                <div className={"w-32 lg:w-52"}>
+                    <Image src={navbarLogo} alt={"Logo"}/>
                 </div>
                 <div className={"hidden md:block"}>
-                    <UserNavLinks className={'flex md:gap-4 m-auto lg:gap-8'}/>
+                    <UserNavLinks className={'flex md:gap-6 m-auto lg:gap-8'}/>
                 </div>
                 <div className={"flex gap-1.5"}>
                     {isLoggedIn ? (
                         <div className={"flex gap-1.5"}>
                             <Link href={"/shelf"}>
-                                <PiBooksBold size={28} color={"white"}/>
+                                <div className={"text-2xl lg:text-4xl"}>
+                                    <PiBooksBold color={"white"}/>
+                                </div>
+
                             </Link>
-                            <Link href={"/profile"}>
-                                <FaUser size={25} color={"white"}/>
-                            </Link>
+                            <button onClick={() => {
+                                setNavBar(false)
+                                setProfileModalOpen(!isProfileModalOpen)
+                            }}>
+                                <div className={"text-xl lg:text-3xl mb-2"}>
+                                    <FaUser color={"white"}/>
+                                </div>
+
+                            </button>
                         </div>
 
                     ) : (
@@ -37,7 +49,10 @@ const UserNavbar = ({isLoggedIn = false}) => {
 
                     )}
                     <div className={"md:hidden"}>
-                        <button onClick={() => setNavBar(!navBar)}>
+                        <button onClick={() => {
+                            setProfileModalOpen(false);
+                            setNavBar(!navBar)
+                        }}>
                             <IoMenu size={28}/>
                         </button>
 
@@ -51,7 +66,16 @@ const UserNavbar = ({isLoggedIn = false}) => {
                 </div>
             )}
 
+            {isProfileModalOpen && (
+                <div className={"absolute top-0 bg-transparent w-screen h-screen"}
+                     onClick={() => setProfileModalOpen(false)}>
+                    <div className={"absolute z-10 top-14 right-[15px] md:right-[50px] lg:right-[100px]"}
+                         onClick={(e) => e.stopPropagation()}>
+                        <ProfileModal/>
+                    </div>
+                </div>
 
+            )}
         </nav>
     );
 };
