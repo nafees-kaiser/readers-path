@@ -23,7 +23,7 @@ const Page = ({params: {id}}) => {
                         <CustomRating readOnly={true} rating={4.5} className={"text-xl md:text-2xl"}/>
                     </div>
                 </div>
-                <div className={"flex flex-col gap-2"}>
+                <div className={"flex flex-col gap-3"}>
                     {[...Array(5)].map((v, i) => {
                         return <ReviewCard/>
                     })}
@@ -31,7 +31,7 @@ const Page = ({params: {id}}) => {
             </div>
             <div className={"flex flex-col gap-4"}>
                 <div className={"text-lg md:text-xl font-bold"}>Questions about the book</div>
-                <div className={"flex flex-col gap-2"}>
+                <div className={"flex flex-col gap-3"}>
                     {[...Array(5)].map((v, i) => {
                         return <QuestionCard/>
                     })}
