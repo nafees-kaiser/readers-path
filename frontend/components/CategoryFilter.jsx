@@ -4,7 +4,7 @@ import {IoClose} from "react-icons/io5";
 import CheckBox from "@/components/CheckBox";
 import Button from "@/components/Button";
 
-const CategoryFilter = () => {
+const CategoryFilter = ({setIsCategoryModalOpen}) => {
     return (
         <div
             className={"flex flex-col gap-12"}>
