@@ -3,7 +3,7 @@ import React from 'react';
 const Page = () => {
     return (
         <div>
-            hello world!!!!
+            This is inside recommended books
         </div>
     );
 };
