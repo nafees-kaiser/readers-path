@@ -1,4 +1,5 @@
-import BookCard from "@/components/BookCard";
+import BookInfoCard from "@/components/BookInfoCard";
+import AddBookLink from "@/components/AddBookLink";
 
 export default function Home() {
     return (
@@ -13,8 +14,10 @@ export default function Home() {
             {/*        prefixIcon={<Fa0/>}*/}
             {/*        suffixIcon={<FaArrowRight/>}/>*/}
             <div className={'mx-[10px]'}>
-                <BookCard state={"shelf"}/>
+                {/*<BookCard state={"shelf"}/>*/}
+                <BookInfoCard/>
             </div>
+            <AddBookLink content={"hello"}/>
             {/*<div className={"absolute top-52 left-36"}>*/}
             {/*    <BookStateMenu/>*/}
             {/*</div>*/}
