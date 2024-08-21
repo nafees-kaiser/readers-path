@@ -1,6 +1,6 @@
 "use client"
 
-import QuestionCard from "@/components/QuestionCard";
+import ProfileModal from "@/components/ProfileModal";
 
 export default function Home() {
     return (
@@ -22,7 +22,9 @@ export default function Home() {
                 {/*    rating={1}*/}
                 {/*/>*/}
                 {/*<ReviewCard/>*/}
-                <QuestionCard/>
+                {/*<QuestionCard/>*/}
+                <ProfileModal/>
+                <div className={"h-56"}></div>
             </div>
             {/*<div className={"absolute top-52 left-36"}>*/}
             {/*    <BookStateMenu/>*/}

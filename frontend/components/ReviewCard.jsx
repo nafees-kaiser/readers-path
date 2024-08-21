@@ -1,14 +1,12 @@
 import React from 'react';
-import {FaUser} from "react-icons/fa6";
 import CustomRating from "@/components/CustomRating";
+import ProfileAvatar from "@/components/ProfileAvatar";
 
 const ReviewCard = () => {
     return (
         <div className={"flex-col flex gap-2 p-2 border border-border rounded-lg lg:p-4"}>
             <div className={"flex gap-2 items-center"}>
-                <div className={"text-2xl bg-light-text w-fit text-white p-3 rounded-[100px]"}>
-                    <FaUser/>
-                </div>
+                <ProfileAvatar className={"text-2xl"}/>
                 <div className={"flex flex-col gap-1"}>
                     <div className={"font-bold text-sm md:text-base"}>User</div>
                     <div className={"flex gap-1 items-center"}>
