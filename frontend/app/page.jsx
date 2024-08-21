@@ -1,6 +1,6 @@
 "use client"
 
-import ReviewCard from "@/components/ReviewCard";
+import QuestionCard from "@/components/QuestionCard";
 
 export default function Home() {
     return (
@@ -21,7 +21,8 @@ export default function Home() {
                 {/*    stop={1}*/}
                 {/*    rating={1}*/}
                 {/*/>*/}
-                <ReviewCard/>
+                {/*<ReviewCard/>*/}
+                <QuestionCard/>
             </div>
             {/*<div className={"absolute top-52 left-36"}>*/}
             {/*    <BookStateMenu/>*/}
