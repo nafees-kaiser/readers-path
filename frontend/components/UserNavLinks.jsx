@@ -14,7 +14,7 @@ const UserNavLinks = ({className}) => {
                 content={"All books"}
             />
             <NavLink
-                address={"/recommended-books"}
+                address={"/rec-books"}
                 content={"Recommended"}
             />
             <NavLink
