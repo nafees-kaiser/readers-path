@@ -8,10 +8,12 @@ import Link from "next/link";
 import {IoMenu} from "react-icons/io5";
 import UserNavLinks from "@/components/UserNavLinks";
 import ProfileModal from "@/components/ProfileModal";
+import {useSession} from "next-auth/react";
 
-const UserNavbar = ({isLoggedIn = false}) => {
+const UserNavbar = () => {
     const [navBar, setNavBar] = useState(false);
     const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+    const session = useSession();
     return (
         <nav>
             <div
@@ -23,7 +25,7 @@ const UserNavbar = ({isLoggedIn = false}) => {
                     <UserNavLinks className={'flex md:gap-6 m-auto lg:gap-8'}/>
                 </div>
                 <div className={"flex gap-1.5"}>
-                    {isLoggedIn ? (
+                    {session?.data?.user ? (
                         <div className={"flex gap-1.5"}>
                             <Link href={"/shelf"}>
                                 <div className={"text-2xl lg:text-4xl"}>
