@@ -4,14 +4,36 @@ import bookCover from "../public/book-covers.jpg"
 import {FaRegTrashAlt, FaStar} from "react-icons/fa";
 import ShelfCardElement from "@/components/ShelfCardElement";
 import {FiEdit} from "react-icons/fi";
+import useSWRMutation from "swr/mutation";
+import {deleteFetcher} from "@/utils/fetcher";
+import {useSWRConfig} from "swr";
 
-const BookCard = ({state, value}) => {
+const BookCard = ({state, value, shelf}) => {
+    const {mutate} = useSWRConfig()
     const imageEncoded = value?.coverImage?.imageEncoded ? value?.coverImage?.imageEncoded : null;
     const imageType = value?.coverImage?.imageType ? value?.coverImage?.imageType : null;
     const image = `data:${imageType};base64,${imageEncoded}`;
+
+
+    const {trigger: deleteMyBooks} = useSWRMutation(
+        [`/user/my-books/delete/${value?.id}`],
+        deleteFetcher
+    )
+
+    const handleDelete = async () => {
+        if (state === 'myBooks') {
+            try {
+                const res = await deleteMyBooks();
+                mutate('/my-books', {})
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+
     return (
         <div
-            className={"hover:bg-tertiary-bg flex flex-col w-full gap-2 border border-border rounded-lg p-2 sm:p-4 md:p-6"}>
+            className={"hover:bg-tertiary-bg flex flex-col w-full gap-2 border border-border rounded-lg p-2 sm:p-4 md:p-6 text-start"}>
             <div className={" flex justify-start items-start gap-4 w-full"}>
                 <div className={"w-24 xs:w-28"}>
                     <Image src={value?.coverImage ? image : bookCover} alt={"Book cover"}
@@ -51,8 +73,9 @@ const BookCard = ({state, value}) => {
                 </div>
             </div>
             {state === 'shelf' && (
-                <div className={"border-t border-divider pt-2 mt-2"}>
-                    <ShelfCardElement/>
+                <div className={"border-t border-divider pt-2 mt-2"}
+                     onClick={(e) => e.stopPropagation()}>
+                    <ShelfCardElement value={shelf}/>
                 </div>
 
             )}
@@ -62,7 +85,9 @@ const BookCard = ({state, value}) => {
                         <button className={'text-xl md:text-2xl text-light-text '}>
                             <FiEdit/>
                         </button>
-                        <button className={'text-xl md:text-2xl text-light-text'}>
+                        <button
+                            onClick={() => handleDelete().then()}
+                            className={'text-xl md:text-2xl text-light-text'}>
                             <FaRegTrashAlt/>
                         </button>
                     </div>

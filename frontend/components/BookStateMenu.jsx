@@ -4,29 +4,80 @@ import Option from "@/components/Option";
 import BookStateMenuItem from "@/components/BookStateMenuItem";
 import {FaCircle, FaMinusCircle} from "react-icons/fa";
 import {FaCircleCheck} from "react-icons/fa6";
+import useSWRMutation from "swr/mutation";
+import {postFetcher, putFetcher} from "@/utils/fetcher";
+import {toast} from "sonner";
+import {useSWRConfig} from "swr";
 
-const BookStateMenu = () => {
-    const [title, setTitle] = useState("Wish to read");
-    const changeTitle = (e, title) => {
+const BookStateMenu = ({value}) => {
+    let state = value?.state?.replace(/_/g, ' ');
+    state = state?.charAt(0).toUpperCase() + state.substring(1).toLowerCase();
+
+    const {mutate} = useSWRConfig();
+
+    // useEffect(() => {
+    //     console.log(state)
+    // }, []);
+    const [title, setTitle] = useState(state ?
+        state
+        : 'Wish to read');
+    const changeTitle = async (e, t) => {
         e.preventDefault();
-        setTitle(title);
+        setTitle(t);
+        try {
+            const shelfState = t.replace(/ /g, '_').toUpperCase()
+            // console.log(shelfState)
+
+            const res = await trigger({
+                id: value?.id,
+                state: shelfState
+            })
+            if (res.status === 200) {
+                toast.success("State changed to " + t)
+                mutate("/shelf")
+            }
+        } catch (e) {
+            console.log(e)
+        }
+
+        if (t === "Finished") {
+            try {
+                const res = await addReward({id: value?.book?.id})
+                if (res.status === 201) {
+                    toast.success("Congratulations! you have completed reading" + value?.book?.title)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        // toast.success("State changed to " + t)
     }
+
+    const {trigger} = useSWRMutation(['/user/shelf/change-state'], putFetcher)
+    const {trigger: addReward} = useSWRMutation(['/user/reward/complete-book'], postFetcher)
+
     return (
         <Option
             menuItems={
                 <div>
                     <BookStateMenuItem content={<div className={'flex gap-1.5 items-center'}
-                                                     onClick={(e) => changeTitle(e, "Wish to read")}>
+                                                     onClick={(e) => {
+                                                         changeTitle(e, "Wish to read").then()
+                                                     }}>
                         <FaCircle className={'text-secondary'}/>
                         Wish to read
                     </div>}/>
                     <BookStateMenuItem content={<div className={'flex gap-1.5 items-center'}
-                                                     onClick={(e) => changeTitle(e, "In progress")}>
+                                                     onClick={(e) => {
+                                                         changeTitle(e, "On progress").then()
+                                                     }}>
                         <FaMinusCircle className={'text-gray-800'}/>
-                        In progress
+                        On progress
                     </div>}/>
                     <BookStateMenuItem content={<div className={'flex gap-1.5 items-center'}
-                                                     onClick={(e) => changeTitle(e, "Finished")}>
+                                                     onClick={(e) => {
+                                                         changeTitle(e, "Finished").then()
+                                                     }}>
                         <FaCircleCheck className={'text-primary'}/>
                         Finished
                     </div>}/>

@@ -1,4 +1,4 @@
-import {deleteCall, getCall, postCall} from "@/utils/axios.settings";
+import {deleteCall, getCall, postCall, putCall} from "@/utils/axios.settings";
 
 export async function fetcher(url) {
     return await getCall({url});
@@ -14,4 +14,8 @@ export async function postFetcher([url, headers], {arg}) {
 
 export async function deleteFetcher([url, headers], {arg}) {
     return await deleteCall({url, headers});
+}
+
+export async function putFetcher([url, headers], {arg}) {
+    return await putCall({url, headers, data: arg});
 }

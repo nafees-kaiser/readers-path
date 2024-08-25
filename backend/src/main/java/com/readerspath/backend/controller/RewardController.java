@@ -34,7 +34,7 @@ public class RewardController {
         try {
             Reward reward = rewardService.getReward();
             RewardView rewardView = Convertion.covertToView(reward, RewardView.class);
-            return new ResponseEntity<>(rewardView, HttpStatus.CREATED);
+            return new ResponseEntity<>(rewardView, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }

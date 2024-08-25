@@ -9,6 +9,7 @@ import com.readerspath.backend.repository.ShelfRepository;
 import com.readerspath.backend.service.AppUserService;
 import com.readerspath.backend.service.BookService;
 import com.readerspath.backend.service.ShelfService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,7 @@ public class ShelfServiceImpl implements ShelfService {
         return shelfRepository.findAllByAppUser(appUser);
     }
 
+    @Transactional
     @Override
     public List<Shelf> getShelf() {
         AppUser appUser = appUserService.getAppUserFromSession();
@@ -61,8 +63,19 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public void deleteShelf(Long id) {
-        Shelf shelf = this.findShelfById(id);
+//        Shelf shelf = this.findShelfById(id);
+        Book book = bookService.findBookById(id);
+        AppUser appUser = appUserService.getAppUserFromSession();
+        Shelf shelf = shelfRepository.findByAppUserAndBook(appUser, book);
         shelfRepository.delete(shelf);
+    }
+
+    @Override
+    public Boolean bookExists(Long id) {
+        Book book = bookService.findBookById(id);
+        AppUser appUser = appUserService.getAppUserFromSession();
+        Shelf shelf = shelfRepository.findByAppUserAndBook(appUser, book);
+        return shelf != null;
     }
 
 
