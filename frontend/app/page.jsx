@@ -1,10 +1,15 @@
 "use client"
 
-import ProfileModal from "@/components/ProfileModal";
+import UserNavbar from "@/components/UserNavbar";
 
 export default function Home() {
+    // const [token, setToken] = React.useState(null);
+    // const session = <SessionProvider>useSession()</SessionProvider>
+
+
     return (
         <main className="">
+            <UserNavbar/>
             {/*<TextField*/}
             {/*    type="text"*/}
             {/*    name={"email"}*/}
@@ -23,8 +28,11 @@ export default function Home() {
                 {/*/>*/}
                 {/*<ReviewCard/>*/}
                 {/*<QuestionCard/>*/}
-                <ProfileModal/>
-                <div className={"h-56"}></div>
+                {/*<ProfileModal/>*/}
+                {/*<div className={"h-56"}></div>*/}
+                hello
+
+
             </div>
             {/*<div className={"absolute top-52 left-36"}>*/}
             {/*    <BookStateMenu/>*/}
