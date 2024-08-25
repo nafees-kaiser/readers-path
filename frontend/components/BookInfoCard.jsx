@@ -1,20 +1,22 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Image from "next/image";
 import bookCover from "@/public/book-covers.jpg";
 import {FaStar} from "react-icons/fa";
 import ViewBookLink from "@/components/ViewBookLink";
 import {PiBooksBold} from "react-icons/pi";
 import useSWRMutation from "swr/mutation";
-import {deleteFetcher, postFetcher} from "@/utils/fetcher";
+import {deleteFetcher, fetcher, postFetcher} from "@/utils/fetcher";
+import useSWR from "swr";
 
 const BookInfoCard = ({value}) => {
-    // useEffect(() => {
-    //     console.log(value?.coverImage)
-    // }, [value]);
-    // const {imageEncoded, imageType} = value?.coverImage
+    const {data: shelfStatus} = useSWR(value?.id ? `/user/shelf/book-exists/${value?.id}` : null, fetcher)
 
     const [isShelf, setIsShelf] = useState(false);
+    useEffect(() => {
+        setIsShelf(shelfStatus?.data)
+    }, [shelfStatus]);
+
 
     const {trigger: addToShelf} = useSWRMutation(
         ['/user/shelf/add', {}],

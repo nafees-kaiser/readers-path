@@ -2,9 +2,11 @@ package com.readerspath.backend.service;
 
 import com.readerspath.backend.model.AppUser;
 import com.readerspath.backend.model.Shelf;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface ShelfService {
     Shelf addToShelf(Shelf shelf);
 
@@ -17,4 +19,6 @@ public interface ShelfService {
     Shelf changeShelfState(Shelf shelf);
 
     void deleteShelf(Long id);
+
+    Boolean bookExists(Long id);
 }

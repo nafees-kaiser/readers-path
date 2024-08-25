@@ -34,7 +34,7 @@ public class ShelfController {
         try {
             shelf = shelfService.changeShelfState(shelf);
             ShelfView shelfView = Convertion.covertToView(shelf, ShelfView.class);
-            return new ResponseEntity<>(shelfView, HttpStatus.CREATED);
+            return new ResponseEntity<>(shelfView, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -45,7 +45,7 @@ public class ShelfController {
         try {
             List<Shelf> shelfList = shelfService.getShelf();
             List<ShelfView> shelfViewList = Convertion.convertToViewList(shelfList, ShelfView.class);
-            return new ResponseEntity<>(shelfViewList, HttpStatus.CREATED);
+            return new ResponseEntity<>(shelfViewList, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -56,6 +56,16 @@ public class ShelfController {
         try {
             shelfService.deleteShelf(id);
             return new ResponseEntity<>(Map.of("message", "Book deleted successfully"), HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/book-exists/{id}")
+    public ResponseEntity<?> bookExists(@PathVariable("id") Long id) {
+        try {
+            Boolean isBookExists = shelfService.bookExists(id);
+            return new ResponseEntity<>(isBookExists, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
