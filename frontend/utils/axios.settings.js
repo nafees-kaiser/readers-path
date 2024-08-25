@@ -19,7 +19,7 @@ export const HTTP_STATUS = {
     REQUEST_TIMEOUT: 408,
 };
 
-const REQUEST_STATUS = {
+export const REQUEST_STATUS = {
     GET: HTTP_STATUS.OK,
     PUT: HTTP_STATUS.OK,
     PATCH: HTTP_STATUS.OK,

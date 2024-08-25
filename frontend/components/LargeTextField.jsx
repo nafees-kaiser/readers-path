@@ -10,6 +10,7 @@ const LargeTextField = ({name, placeholder, handleChange, label, value}) => {
                 name={name}
                 placeholder={placeholder}
                 onChange={handleChange}
+                required={true}
                 value={value}
             />
         </div>

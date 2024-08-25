@@ -8,6 +8,7 @@ import com.readerspath.backend.repository.BookRepository;
 import com.readerspath.backend.repository.LinksToBuyRepository;
 import com.readerspath.backend.service.*;
 import com.readerspath.backend.util.Convertion;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,9 +79,11 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
+    @Transactional
     @Override
     public List<BookView> getAllBooks(BookFilterReq req) {
         List<Book> books = bookRepository.filterBooks(req);
+        System.out.println("hello");
         return Convertion.convertToViewList(books, BookView.class);
     }
 
@@ -124,7 +127,6 @@ public class BookServiceImpl implements BookService {
             for (ReviewsAndRating r : reviewsAndRatings) {
                 avg += Double.parseDouble(r.getRating());
             }
-            ;
             avg /= reviewsAndRatings.size();
             book.setOverAllRating(Double.toString(avg));
             bookRepository.save(book);
