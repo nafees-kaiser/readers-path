@@ -4,12 +4,14 @@ import com.readerspath.backend.model.Book;
 import com.readerspath.backend.model.BookFilterReq;
 import com.readerspath.backend.model.Category;
 import com.readerspath.backend.projection.BookView;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public interface BookService {
     Book addBook(Book book, MultipartFile file) throws IOException;
 

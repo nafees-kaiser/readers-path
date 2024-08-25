@@ -43,14 +43,13 @@ public class BookFilterCustomRepositoryImpl implements BookFilterCustomRepositor
             query.append(" ORDER BY b.title ASC");
         }
 
-        TypedQuery<Book> typedQuery = em.createQuery(sql + query.toString(), Book.class);
+        TypedQuery<Book> typedQuery = em.createQuery(sql + query, Book.class);
         if (isCategoryNotNull) {
             typedQuery.setParameter("category", req.category());
         }
         if (isSearchNotNull) {
             typedQuery.setParameter("search", "%" + req.search().trim().toLowerCase() + "%");
         }
-
         return typedQuery.getResultList();
     }
 

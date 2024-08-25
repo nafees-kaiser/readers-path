@@ -26,8 +26,9 @@ public class BookController {
     @PostMapping("/books/all")
     public ResponseEntity<?> getAllBooks(@RequestBody BookFilterReq req) {
         try {
+//            System.out.println(req.toString());
             List<BookView> books = bookService.getAllBooks(req);
-            return new ResponseEntity<>(books, HttpStatus.OK);
+            return new ResponseEntity<>(books, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }

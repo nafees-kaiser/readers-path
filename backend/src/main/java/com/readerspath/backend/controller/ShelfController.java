@@ -55,7 +55,7 @@ public class ShelfController {
     public ResponseEntity<?> deleteShelf(@PathVariable("id") Long id) {
         try {
             shelfService.deleteShelf(id);
-            return new ResponseEntity<>(Map.of("message", "Book deleted successfully"), HttpStatus.CREATED);
+            return new ResponseEntity<>(Map.of("message", "Book deleted successfully"), HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
