@@ -1,6 +1,7 @@
 import _axios from "axios"
 import baseUrl from "@/utils/baseUrl";
 import {throwApiError, throwNetworkError, throwServerError} from "@/utils/errors";
+import {getSession} from "next-auth/react";
 
 export const HTTP_STATUS = {
     OK: 200,
@@ -24,6 +25,16 @@ const REQUEST_STATUS = {
     PATCH: HTTP_STATUS.OK,
     POST: HTTP_STATUS.CREATED,
     DELETE: HTTP_STATUS.NO_CONTENT,
+};
+
+const bearerToken = async ({req}) => {
+    const session = await getSession({req});
+    const a = session?.user?.token
+        ? {
+            'Authorization': `Bearer ${session?.user?.token}`,
+        }
+        : {};
+    return a;
 };
 
 const axios = _axios.create({
@@ -63,7 +74,7 @@ export const callApi = async ({
             data,
             headers: {
                 ...headers,
-                // ...(await bearerToken({req})),
+                ...(await bearerToken({req})),
             },
         });
     } catch (e) {
@@ -99,6 +110,7 @@ export const callApi = async ({
 
     return {data: res.data, revision: res.headers["etag"], status: res.status};
 };
+
 
 export const postCall = async ({
                                    req, url,

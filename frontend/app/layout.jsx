@@ -1,6 +1,9 @@
 import {Lora} from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import {getServerSession} from "next-auth";
+import SessionProvider from "@/utils/sessionProvider";
+
 
 const lora = Lora({subsets: ["latin"]});
 
@@ -9,11 +12,14 @@ export const metadata = {
     description: "A website for increasing reading habit",
 };
 
-export default function RootLayout({children}) {
+export default async function RootLayout({children}) {
+    const session = await getServerSession()
     return (
         <html lang="en">
         <body className={lora.className}>
-        {children}
+        <SessionProvider session={session}>
+            {children}
+        </SessionProvider>
         <Footer/>
         </body>
         </html>
