@@ -100,6 +100,7 @@ public class BookServiceImpl implements BookService {
         return categoryService.addCategory(category);
     }
 
+    @Transactional
     @Override
     public List<Book> findMyBooks() throws BookNotFoundException {
         AppUser appUser = appUserService.getAppUserFromSession();
@@ -115,8 +116,9 @@ public class BookServiceImpl implements BookService {
     public void deleteBookById(Long bookId) {
         Book book = findBookById(bookId);
         book.setLinks(null);
+        Image image = book.getCoverImage();
         book.setCoverImage(null);
-        imageService.deleteImage(book.getCoverImage());
+        imageService.deleteImage(image);
         bookRepository.save(book);
         bookRepository.delete(book);
     }

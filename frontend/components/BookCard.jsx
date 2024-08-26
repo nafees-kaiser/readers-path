@@ -7,6 +7,7 @@ import {FiEdit} from "react-icons/fi";
 import useSWRMutation from "swr/mutation";
 import {deleteFetcher} from "@/utils/fetcher";
 import {useSWRConfig} from "swr";
+import {toast} from "sonner";
 
 const BookCard = ({state, value, shelf}) => {
     const {mutate} = useSWRConfig()
@@ -25,7 +26,11 @@ const BookCard = ({state, value, shelf}) => {
         if (state === 'myBooks') {
             try {
                 const res = await deleteMyBooks();
-                mutate('/my-books', {})
+                console.log(res)
+                if (res.status === 204) {
+                    toast.success("Book deleted successfully!");
+                }
+                mutate('/user/my-books')
             } catch (e) {
                 console.log(e)
             }
@@ -65,7 +70,7 @@ const BookCard = ({state, value, shelf}) => {
                         <div className={"text-secondary md:text-xl"}>
                             <FaStar/>
                         </div>
-                        <div>{value?.overAllRating ? value?.overAllRating : ""} ({
+                        <div>{value?.overAllRating ? value?.overAllRating : "0"} ({
                             value?.reviewsAndRating ? value?.reviewsAndRating.length : "0"
                         })
                         </div>
@@ -81,9 +86,12 @@ const BookCard = ({state, value, shelf}) => {
 
             )}
             {state === 'myBooks' && (
-                <div className={"border-t border-divider pt-2 mt-2 h-8 relative"}>
+                <div className={"border-t border-divider pt-2 mt-2 h-8 relative"}
+                     onClick={(e) => e.stopPropagation()}>
                     <div className={"flex items-center justify-start gap-1.5 absolute right-0 bottom-0"}>
-                        <button className={'text-xl md:text-2xl text-light-text '}>
+                        <button className={'text-xl md:text-2xl text-light-text '}
+                                onClick={() => console.log("hello")}
+                        >
                             <FiEdit/>
                         </button>
                         <button

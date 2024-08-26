@@ -18,12 +18,15 @@ const ShelfAndMyBooksBody = ({state = "shelf", heading = "Shelf", value = null})
                         {value && value.length > 0 &&
                             value.map(v => (
                                 <button className={"w-full"}
-                                        onClick={() => router.push(`/books/${v?.book.id}`)}>
+                                        onClick={() => {
+                                            const link = state === "shelf" ? v?.book?.id : v?.id;
+                                            router.push(`/books/${link}`)
+                                        }}>
                                     <BookCard
                                         key={v.id}
-                                        state={"shelf"}
-                                        value={v.book && v.book}
-                                        shelf={v}
+                                        state={state}
+                                        value={state === "shelf" ? v?.book : v}
+                                        shelf={state === "shelf" && v}
                                     />
                                 </button>
 

@@ -83,7 +83,7 @@ public class BookController {
     public ResponseEntity<?> deleteBook(@PathVariable("bookId") Long bookId) {
         try {
             bookService.deleteBookById(bookId);
-            return new ResponseEntity<>(Map.of("message", "Book deleted successfully"), HttpStatus.OK);
+            return new ResponseEntity<>(Map.of("message", "Book deleted successfully"), HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
