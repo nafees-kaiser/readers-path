@@ -194,6 +194,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
+    @Override
+    public Boolean isMyBook(Long id) {
+        Book book = this.findBookById(id);
+        AppUser appUser = appUserService.getAppUserFromSession();
+
+        return book.getAuthor().getAppUser() != null && book.getAuthor().getAppUser().getEmail().equals(appUser.getEmail());
+    }
+
     private Author getAuthor(Map<String, Object> authorObj) {
         Author author = authorService.findAuthorByName((String) authorObj.get("name"));
         if (author == null) {

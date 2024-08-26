@@ -28,4 +28,6 @@ public interface BookService {
     void updateOverAllRating(Book book);
 
     Book editBook(Map<String, Object> updates, MultipartFile file) throws IOException;
+
+    Boolean isMyBook(Long id);
 }
