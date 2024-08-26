@@ -7,10 +7,7 @@ import com.readerspath.backend.util.Convertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -26,6 +23,16 @@ public class ReviewsAndRatingController {
             ReviewsAndRating reviewsAndRating = reviewsAndRatingService.addReview(review);
             ReviewsAndRatingView reviewsAndRatingView = Convertion.covertToView(reviewsAndRating, ReviewsAndRatingView.class);
             return new ResponseEntity<>(reviewsAndRatingView, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/already-reviewed/{id}")
+    public ResponseEntity<?> getAlreadyReviewed(@PathVariable("id") Long id) {
+        try {
+            Boolean isAlreadyReviewed = reviewsAndRatingService.isAlreadyReviewed(id);
+            return new ResponseEntity<>(isAlreadyReviewed, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }

@@ -31,4 +31,12 @@ public class ReviewsAndRatingServiceImpl implements ReviewsAndRatingService {
         bookService.updateOverAllRating(book);
         return reviewsAndRating;
     }
+
+    @Override
+    public Boolean isAlreadyReviewed(Long id) {
+        Book book = bookService.findBookById(id);
+        AppUser appUser = appUserService.getAppUserFromSession();
+        ReviewsAndRating reviewsAndRating = reviewsAndRatingRepository.findByAppUserAndBook(appUser, book);
+        return reviewsAndRating != null;
+    }
 }
