@@ -8,6 +8,7 @@ import useSWRMutation from "swr/mutation";
 
 const ShelfCardElement = ({value}) => {
     const {mutate} = useSWRConfig();
+
     const {data: userData} = useSWR('/user', fetcher);
     const user = userData?.data;
 
@@ -18,7 +19,7 @@ const ShelfCardElement = ({value}) => {
     const handleShelf = async () => {
         try {
             const res = await removeFromShelf()
-            mutate('/shelf')
+            mutate('/user/shelf')
             console.log(res)
         } catch (e) {
             console.error(e);

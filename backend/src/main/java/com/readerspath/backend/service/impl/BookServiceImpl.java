@@ -51,10 +51,13 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book addBook(Book book, MultipartFile file) throws BookAddFailedException, IOException {
         AppUser appUser = appUserService.getAppUserFromSession();
-        Author author = authorService.findAuthorByAppUser(appUser);
-        if (author == null && appUser.getRole().equals("ROLE_USER")) {
-            Author newAuthor = new Author(appUser.getName(), appUser);
-            author = authorService.addAuthor(newAuthor);
+        Author author;
+        if (appUser.getRole().equals("ROLE_USER")) {
+            author = authorService.findAuthorByAppUser(appUser);
+            if (author == null) {
+                Author newAuthor = new Author(appUser.getName(), appUser);
+                author = authorService.addAuthor(newAuthor);
+            }
         } else {
             author = authorService.findAuthorByName(book.getAuthor().getName());
             if (author == null) {
@@ -97,6 +100,7 @@ public class BookServiceImpl implements BookService {
         return categoryService.addCategory(category);
     }
 
+    @Transactional
     @Override
     public List<Book> findMyBooks() throws BookNotFoundException {
         AppUser appUser = appUserService.getAppUserFromSession();
@@ -112,8 +116,9 @@ public class BookServiceImpl implements BookService {
     public void deleteBookById(Long bookId) {
         Book book = findBookById(bookId);
         book.setLinks(null);
+        Image image = book.getCoverImage();
         book.setCoverImage(null);
-        imageService.deleteImage(book.getCoverImage());
+        imageService.deleteImage(image);
         bookRepository.save(book);
         bookRepository.delete(book);
     }
@@ -185,7 +190,7 @@ public class BookServiceImpl implements BookService {
                 }
             }
         });
-        imageService.editImage(book.getCoverImage(), file);
+        if (file != null) imageService.editImage(book.getCoverImage(), file);
         return bookRepository.save(book);
     }
 

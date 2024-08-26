@@ -11,4 +11,5 @@ import lombok.*;
 @ToString
 public class LinksToBuy extends BaseEntity<Long> {
     private String link;
+    private String name;
 }

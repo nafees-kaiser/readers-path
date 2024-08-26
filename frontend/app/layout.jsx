@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import {getServerSession} from "next-auth";
 import SessionProvider from "@/utils/sessionProvider";
+import {Toaster} from "sonner";
 
 
 const lora = Lora({subsets: ["latin"]});
@@ -18,6 +19,7 @@ export default async function RootLayout({children}) {
         <html lang="en">
         <body className={lora.className}>
         <SessionProvider session={session}>
+            <Toaster position={"top-center"} richColors={true}/>
             {children}
         </SessionProvider>
         <Footer/>
