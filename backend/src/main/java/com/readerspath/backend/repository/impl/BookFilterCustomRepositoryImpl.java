@@ -22,7 +22,7 @@ public class BookFilterCustomRepositoryImpl implements BookFilterCustomRepositor
         boolean isSearchNotNull = req.search() != null && !req.search().isEmpty();
         boolean isSortByNotNull = req.sortBy() != null && !req.sortBy().isEmpty();
 
-        String category = " c.name = :category";
+        String category = " c.name in (:category)";
         String search = " (lower(b.title)) LIKE :search";
 
         if (isCategoryNotNull) {

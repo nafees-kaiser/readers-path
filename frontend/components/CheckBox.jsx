@@ -10,7 +10,9 @@ const CheckBox = ({content, onChange}) => {
             <Checkbox
                 className={"group size-4 md:size-5 flex justify-center items-center rounded border border-border bg-white data-[checked]:bg-secondary"}
                 onChange={() => {
-                    setEnabled(!enabled);
+                    const checked = !enabled
+                    checked ? onChange(content, "add") : onChange(content, "remove");
+                    setEnabled(checked);
                 }}
                 checked={enabled}
             >
