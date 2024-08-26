@@ -8,10 +8,11 @@ import useSWRMutation from "swr/mutation";
 import {deleteFetcher} from "@/utils/fetcher";
 import {useSWRConfig} from "swr";
 import {toast} from "sonner";
+import {useRouter} from "next/navigation";
 
 const BookCard = ({state, value, shelf}) => {
     const {mutate} = useSWRConfig()
-
+    const router = useRouter()
     const imageEncoded = value?.coverImage?.imageEncoded ? value?.coverImage?.imageEncoded : null;
     const imageType = value?.coverImage?.imageType ? value?.coverImage?.imageType : null;
     const image = `data:${imageType};base64,${imageEncoded}`;
@@ -90,7 +91,7 @@ const BookCard = ({state, value, shelf}) => {
                      onClick={(e) => e.stopPropagation()}>
                     <div className={"flex items-center justify-start gap-1.5 absolute right-0 bottom-0"}>
                         <button className={'text-xl md:text-2xl text-light-text '}
-                                onClick={() => console.log("hello")}
+                                onClick={() => router.push(`/edit-book/${value?.id}`)}
                         >
                             <FiEdit/>
                         </button>

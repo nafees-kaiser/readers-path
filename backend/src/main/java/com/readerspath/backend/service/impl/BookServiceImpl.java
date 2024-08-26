@@ -190,7 +190,7 @@ public class BookServiceImpl implements BookService {
                 }
             }
         });
-        imageService.editImage(book.getCoverImage(), file);
+        if (file != null) imageService.editImage(book.getCoverImage(), file);
         return bookRepository.save(book);
     }
 

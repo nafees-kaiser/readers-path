@@ -6,9 +6,7 @@ import EmptyComponent from "@/components/EmptyComponent";
 
 const ShelfAndMyBooksBody = ({state = "shelf", heading = "Shelf", value = null}) => {
     const router = useRouter();
-    // useEffect(() => {
-    //     console.log(value)
-    // }, [value]);
+
     return (
         <div>
             <div className={"flex flex-col px-[15px] md:px-[50px] lg:px-[100px] py-8 gap-6"}>

@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react';
 import Image from "next/image";
 import {FaRegImage} from "react-icons/fa";
 
-const InputImage = ({label, onChange}) => {
+const InputImage = ({label, onChange, required = true}) => {
     const [image, setImage] = useState('')
     const handleImage = (e) => {
         e.preventDefault();
@@ -24,7 +24,7 @@ const InputImage = ({label, onChange}) => {
                 className={"p-4 min-h-36 h-fit w-full sm:w-36 cursor-pointer rounded-lg bg-tertiary-bg flex items-center justify-center"}>
                 <input
                     type={"file"}
-                    required={true}
+                    required={required}
                     id={"image"}
                     className={"hidden w-full"}
                     ref={imageRef}

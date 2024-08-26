@@ -19,7 +19,7 @@ const ShelfCardElement = ({value}) => {
     const handleShelf = async () => {
         try {
             const res = await removeFromShelf()
-            mutate('/shelf')
+            mutate('/user/shelf')
             console.log(res)
         } catch (e) {
             console.error(e);

@@ -34,7 +34,7 @@ const BookStateMenu = ({value}) => {
             })
             if (res.status === 200) {
                 toast.success("State changed to " + t)
-                mutate("/shelf")
+                mutate("/user/shelf")
             }
         } catch (e) {
             console.log(e)
