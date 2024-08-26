@@ -3,8 +3,25 @@ import React from 'react';
 import {IoClose} from "react-icons/io5";
 import CheckBox from "@/components/CheckBox";
 import Button from "@/components/Button";
+import useSWR from "swr";
+import {fetcher} from "@/utils/fetcher";
 
-const CategoryFilter = ({setIsCategoryModalOpen}) => {
+const CategoryFilter = ({setIsCategoryModalOpen, apply}) => {
+    const [categories, setCategories] = React.useState([]);
+
+    const handleCategory = (cat, ins) => {
+        if (ins === "add") {
+            if (!categories.includes(cat)) {
+                setCategories(prevState => [...prevState, cat]);
+            }
+        } else {
+            if (categories.includes(cat)) {
+                setCategories(prevState => prevState.filter(c => c !== cat))
+            }
+        }
+    }
+
+    const {data} = useSWR("/category", fetcher)
     return (
         <div
             className={"flex flex-col gap-12"}>
@@ -19,12 +36,21 @@ const CategoryFilter = ({setIsCategoryModalOpen}) => {
                 </div>
 
                 <div className={"flex flex-col gap-2"}>
-                    <CheckBox
-                        content={"Novel"}/>
-                    <CheckBox content={"Thriller"}/>
+                    {data?.data &&
+                        data?.data?.map(cat => (
+                            <CheckBox key={cat.id}
+                                      onChange={handleCategory}
+                                      content={cat.name}/>
+                        ))
+                    }
+                    {/*<CheckBox*/}
+                    {/*    content={"Novel"}/>*/}
+                    {/*<CheckBox content={"Thriller"}/>*/}
                 </div>
             </div>
-            <Button className={"bg-secondary hover:bg-button-hover text-white"} content={"Apply"}/>
+            <Button
+                onClick={() => apply(categories)}
+                className={"bg-secondary hover:bg-button-hover text-white"} content={"Apply"}/>
         </div>
     );
 };

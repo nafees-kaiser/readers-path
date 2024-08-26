@@ -1,32 +1,28 @@
 "use client"
-import React from 'react';
-import {usePathname, useSearchParams} from "next/navigation";
+import React, {useEffect} from 'react';
 import useSWR from "swr";
 import {bookFetcher} from "@/utils/fetcher";
 import BookCard from "@/components/BookCard";
 import Link from "next/link";
+import {useFilter} from "@/utils/FilterDataContext";
 
 const BooksPage = () => {
-    const param = useSearchParams();
-    const search = param.get("search");
-    const path = usePathname();
 
-    const filter = {
-        search,
-        category: '',
-        sortBy: ''
+    const filter = useFilter()
+    useEffect(() => {
+        console.log("inside page, ", filter)
+    });
+
+    const {data, isLoading, mutate} = useSWR(["/books/all", filter], bookFetcher);
+    let books = data?.data;
+
+    const update = async () => {
+        await mutate(data);
     }
 
-    const {data, isLoading, error} = useSWR(["/books/all", {}], bookFetcher);
-    const books = data?.data;
-
-
-    // useEffect(() => {
-    //     // console.log(books)
-    //     // console.log(books)
-    //     const resp = axios.post('http://localhost:8080/api/v1/books/all', {}).then(res => res.data)
-    //     console.log(resp)
-    // }, []);
+    useEffect(() => {
+        update().then()
+    }, [filter]);
 
     return (
         <div className={"w-full flex flex-col gap-4"}>
