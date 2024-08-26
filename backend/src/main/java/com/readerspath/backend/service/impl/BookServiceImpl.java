@@ -51,10 +51,13 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book addBook(Book book, MultipartFile file) throws BookAddFailedException, IOException {
         AppUser appUser = appUserService.getAppUserFromSession();
-        Author author = authorService.findAuthorByAppUser(appUser);
-        if (author == null && appUser.getRole().equals("ROLE_USER")) {
-            Author newAuthor = new Author(appUser.getName(), appUser);
-            author = authorService.addAuthor(newAuthor);
+        Author author;
+        if (appUser.getRole().equals("ROLE_USER")) {
+            author = authorService.findAuthorByAppUser(appUser);
+            if (author == null) {
+                Author newAuthor = new Author(appUser.getName(), appUser);
+                author = authorService.addAuthor(newAuthor);
+            }
         } else {
             author = authorService.findAuthorByName(book.getAuthor().getName());
             if (author == null) {

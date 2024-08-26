@@ -8,6 +8,7 @@ import useSWRMutation from "swr/mutation";
 
 const ShelfCardElement = ({value}) => {
     const {mutate} = useSWRConfig();
+
     const {data: userData} = useSWR('/user', fetcher);
     const user = userData?.data;
 

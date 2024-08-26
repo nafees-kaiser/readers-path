@@ -15,7 +15,6 @@ const ShelfAndMyBooksBody = ({state = "shelf", heading = "Shelf", value = null})
                 <div className={"text-lg md:text-xl font-bold"}>{heading}</div>
                 {value && value.length > 0 ? (
                     <div className={"flex flex-col gap-3"}>
-                        {/*{[...Array(5)].map((v, i) => <BookCard state={state}/>)}*/}
                         {value && value.length > 0 &&
                             value.map(v => (
                                 <button className={"w-full"}
@@ -30,11 +29,10 @@ const ShelfAndMyBooksBody = ({state = "shelf", heading = "Shelf", value = null})
 
                             ))
                         }
-                        {/*<BookCard state={"shelf"}/>*/}
                     </div>
                 ) : (
                     <EmptyComponent
-                        content={"Shelf is empty"}/>
+                        content={`${heading} is empty`}/>
                 )}
 
             </div>

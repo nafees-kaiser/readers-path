@@ -3,7 +3,7 @@ export default function TextField({type = "text", name, placeholder, handleChang
         <div className="w-full">
             <label className="font-bold text-sm md:text-lg" htmlFor={name}>{label}</label>
             <input
-                className="bg-textFieldColor text-xs md:text-sm rounded-lg focus:ring-primary p-3 w-full border-2 border-hintTextColor"
+                className="bg-white text-xs md:text-sm rounded-lg focus:ring-primary p-3 w-full border-2 border-border"
                 type={type}
                 name={name}
                 placeholder={placeholder}

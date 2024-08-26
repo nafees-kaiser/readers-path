@@ -10,6 +10,7 @@ import {useSWRConfig} from "swr";
 
 const BookCard = ({state, value, shelf}) => {
     const {mutate} = useSWRConfig()
+
     const imageEncoded = value?.coverImage?.imageEncoded ? value?.coverImage?.imageEncoded : null;
     const imageType = value?.coverImage?.imageType ? value?.coverImage?.imageType : null;
     const image = `data:${imageType};base64,${imageEncoded}`;

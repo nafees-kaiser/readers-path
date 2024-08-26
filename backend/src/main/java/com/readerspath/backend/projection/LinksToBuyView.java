@@ -4,4 +4,6 @@ public interface LinksToBuyView {
     Long getId();
 
     String getLink();
+
+    String getName();
 }

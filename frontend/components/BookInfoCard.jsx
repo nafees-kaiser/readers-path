@@ -82,7 +82,7 @@ const BookInfoCard = ({value}) => {
                         <div className={"text-secondary text-sm md:text-xl"}>
                             <FaStar/>
                         </div>
-                        <div>{value?.overAllRating ? value?.overAllRating : ""} ({
+                        <div>{value?.overAllRating ? value?.overAllRating : "0"} ({
                             value?.reviewsAndRating ? value?.reviewsAndRating.length : "0"
                         })
                         </div>
@@ -101,8 +101,9 @@ const BookInfoCard = ({value}) => {
                     {
                         value?.links && value?.links.length > 0 &&
                         value?.links.map((link, index) => (
-                            <ViewBookLink key={link.id}
-                                          content={link.link}/>
+                            <ViewBookLink key={link?.id}
+                                          address={link?.link}
+                                          content={link?.name}/>
                         ))
                     }
                     {/*<ViewBookLink*/}
