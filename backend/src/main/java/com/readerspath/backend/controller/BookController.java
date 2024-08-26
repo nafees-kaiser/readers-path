@@ -99,4 +99,14 @@ public class BookController {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/user/is-my-book/{id}")
+    public ResponseEntity<?> isMyBook(@PathVariable("id") Long id) {
+        try {
+            Boolean isMyBook = bookService.isMyBook(id);
+            return new ResponseEntity<>(isMyBook, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

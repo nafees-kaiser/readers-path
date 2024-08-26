@@ -15,6 +15,11 @@ const Page = ({params: {id}}) => {
     const [ques, setQues] = useState("");
 
     const {data, mutate} = useSWR(url, fetcher)
+    const {data: bookStatus} = useSWR(`/user/is-my-book/${id}`, fetcher)
+    // useEffect(() => {
+    //     console.log(bookStatus)
+    // });
+
     const {trigger} = useSWRMutation(['/user/add-ques', {}], postFetcher)
 
     const addQuestion = async () => {
@@ -41,27 +46,30 @@ const Page = ({params: {id}}) => {
     return (
         <div className={"flex flex-col px-[15px] md:px-[50px] lg:px-[100px] py-8 gap-6 w-full"}>
             <Toaster richColors={true} position={"top-center"}/>
-            <BookInfoBody value={data?.data}/>
-            <div className={"flex flex-col gap-4"}>
-                <div className={"text-lg md:text-xl font-bold"}>Add a question</div>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        addQuestion().then();
-                    }}
-                    className={"flex flex-col gap-2 items-end"}>
-                    <LargeTextField placeholder={"Write something..."}
-                                    handleChange={(e) => {
-                                        e.preventDefault();
-                                        setQues(e.target.value);
-                                    }}
-                    />
-                    <Button
-                        className={"bg-secondary hover:bg-button-hover text-white"}
-                        type={"submit"}
-                        content={"Submit"}/>
-                </form>
-            </div>
+            <BookInfoBody value={data?.data} isMyBook={bookStatus?.data}/>
+            {!bookStatus?.data && (
+                <div className={"flex flex-col gap-4"}>
+                    <div className={"text-lg md:text-xl font-bold"}>Add a question</div>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            addQuestion().then();
+                        }}
+                        className={"flex flex-col gap-2 items-end"}>
+                        <LargeTextField placeholder={"Write something..."}
+                                        handleChange={(e) => {
+                                            e.preventDefault();
+                                            setQues(e.target.value);
+                                        }}
+                        />
+                        <Button
+                            className={"bg-secondary hover:bg-button-hover text-white"}
+                            type={"submit"}
+                            content={"Submit"}/>
+                    </form>
+                </div>
+            )}
+
         </div>
     );
 };

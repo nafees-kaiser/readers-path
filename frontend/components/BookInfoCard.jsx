@@ -8,11 +8,14 @@ import {PiBooksBold} from "react-icons/pi";
 import useSWRMutation from "swr/mutation";
 import {deleteFetcher, fetcher, postFetcher} from "@/utils/fetcher";
 import useSWR from "swr";
+import {useRouter} from "next/navigation";
+import {FiEdit} from "react-icons/fi";
 
-const BookInfoCard = ({value}) => {
+const BookInfoCard = ({value, isMyBook}) => {
     const {data: shelfStatus} = useSWR(value?.id ? `/user/shelf/book-exists/${value?.id}` : null, fetcher)
-
+    const router = useRouter()
     const [isShelf, setIsShelf] = useState(false);
+
     useEffect(() => {
         setIsShelf(shelfStatus?.data)
     }, [shelfStatus]);
@@ -87,12 +90,23 @@ const BookInfoCard = ({value}) => {
                         })
                         </div>
                     </div>
-                    <button
-                        onClick={() => handleShelf().then()}
-                        className={`${isShelf ? 'text-secondary' : 'text-black'} flex items-center gap-1.5 text-xs md:text-base cursor-pointer`}>
-                        <div className={"text-lg md:text-xl"}><PiBooksBold/></div>
-                        <div>{isShelf ? 'Added' : 'Add'} to shelf</div>
-                    </button>
+                    {isMyBook ? (
+                        <button
+                            onClick={() => router.push('/edit-book/' + value?.id)}
+                            className={`flex items-center gap-1.5 text-xs md:text-base cursor-pointer`}>
+                            <div>Edit</div>
+                            <div className={"text-lg md:text-xl"}><FiEdit/></div>
+
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => handleShelf().then()}
+                            className={`${isShelf ? 'text-secondary' : 'text-black'} flex items-center gap-1.5 text-xs md:text-base cursor-pointer`}>
+                            <div className={"text-lg md:text-xl"}><PiBooksBold/></div>
+                            <div>{isShelf ? 'Added' : 'Add'} to shelf</div>
+                        </button>
+                    )}
+
 
                 </div>
             </div>

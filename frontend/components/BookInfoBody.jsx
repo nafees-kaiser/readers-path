@@ -5,13 +5,13 @@ import CustomRating from "@/components/CustomRating";
 import ReviewCard from "@/components/ReviewCard";
 import QuestionCard from "@/components/QuestionCard";
 
-const BookInfoBody = ({isAuthor = false, value}) => {
+const BookInfoBody = ({value, isMyBook = false}) => {
 
 
     return (
         <div className={"flex flex-col gap-6"}>
             <div>
-                <BookInfoCard value={value}/>
+                <BookInfoCard value={value} isMyBook={isMyBook}/>
             </div>
             {value?.reviewsAndRating && value?.reviewsAndRating.length > 0 && (
                 <div className={"flex flex-col gap-4"}>
@@ -49,12 +49,10 @@ const BookInfoBody = ({isAuthor = false, value}) => {
                     <div className={"flex flex-col gap-4"}>
                         <div className={"text-lg md:text-xl font-bold"}>Questions about the book</div>
                         <div className={"flex flex-col gap-3"}>
-                            {/*{[...Array(5)].map((v, i) => {*/}
-                            {/*    return <QuestionCard isAuthor={isAuthor}/>*/}
-                            {/*})}*/}
                             {value?.questionaries.map(ques => (
                                 <QuestionCard key={ques.id}
-                                              isAuthor={isAuthor}
+                                              isAuthor={isMyBook}
+                                              bookId={value?.id}
                                               value={ques}/>
                             ))}
                         </div>
