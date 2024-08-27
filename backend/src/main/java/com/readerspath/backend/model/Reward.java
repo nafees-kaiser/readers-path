@@ -20,11 +20,11 @@ public class Reward extends BaseEntity<Long> {
     @JoinColumn
     private AppUser appUser;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Book> completedBooks;
 
     @Column(columnDefinition = "bigint default 20")
-    private Long coins;
+    private Long coins = 20L;
 
     public void updateCoins() {
         if (this.completedBooks != null) {
@@ -32,7 +32,7 @@ public class Reward extends BaseEntity<Long> {
 
             if (this.coins == null) this.coins = 20L;
 
-            this.coins = inc * COINS_PER_INCREMENT;
+            this.coins = inc * COINS_PER_INCREMENT + 20L;
         }
     }
 

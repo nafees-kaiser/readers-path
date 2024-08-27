@@ -75,6 +75,7 @@ public class BookServiceImpl implements BookService {
             List<LinksToBuy> links = this.addLinksToBuy(book.getLinks());
             book.setLinks(links);
         }
+        book.setOverAllRating("0");
         if (file != null) {
             Image image = imageService.saveImage(file);
             book.setCoverImage(image);
@@ -89,6 +90,7 @@ public class BookServiceImpl implements BookService {
         return Convertion.convertToViewList(books, BookView.class);
     }
 
+    @Transactional
     @Override
     public Book findBookById(Long bookId) throws BookNotFoundException {
         return bookRepository.findById(bookId)

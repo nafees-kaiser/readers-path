@@ -6,14 +6,16 @@ import {FaCircle, FaMinusCircle} from "react-icons/fa";
 import {FaCircleCheck} from "react-icons/fa6";
 import useSWRMutation from "swr/mutation";
 import {postFetcher, putFetcher} from "@/utils/fetcher";
-import {toast} from "sonner";
 import {useSWRConfig} from "swr";
+import {toast} from "sonner";
 
 const BookStateMenu = ({value}) => {
     let state = value?.state?.replace(/_/g, ' ');
     state = state?.charAt(0).toUpperCase() + state.substring(1).toLowerCase();
 
     const {mutate} = useSWRConfig();
+    const {trigger} = useSWRMutation(['/user/shelf/change-state'], putFetcher)
+    const {trigger: addReward} = useSWRMutation(['/user/reward/complete-book'], postFetcher)
 
     // useEffect(() => {
     //     console.log(state)
@@ -49,12 +51,11 @@ const BookStateMenu = ({value}) => {
             } catch (e) {
                 console.log(e)
             }
+            console.log(value?.book)
         }
         // toast.success("State changed to " + t)
     }
 
-    const {trigger} = useSWRMutation(['/user/shelf/change-state'], putFetcher)
-    const {trigger: addReward} = useSWRMutation(['/user/reward/complete-book'], postFetcher)
 
     return (
         <Option
