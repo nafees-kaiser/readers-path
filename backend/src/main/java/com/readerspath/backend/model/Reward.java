@@ -47,6 +47,7 @@ public class Reward extends BaseEntity<Long> {
     }
 
     public String getCompletedBooksCount() {
+        if (this.completedBooks == null) return "0";
         return Long.toString(this.completedBooks.size());
     }
 

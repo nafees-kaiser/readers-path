@@ -14,12 +14,6 @@ const handler = NextAuth({
                 password: {label: "Password", type: "password", placeholder: "Enter Your Password"}
             },
             async authorize(credentials, req) {
-                // // const res = await fetch("http://localhost:8080/api/v1/login", {
-                // //     method: 'POST',
-                // //     body: JSON.stringify(credentials),
-                // //     headers: {"Content-Type": "application/json"}
-                // // })
-                // const user = await res.json();
                 const res = await axios.post(baseUrl + "/login", credentials);
                 const user = res.data;
                 console.log(credentials);
