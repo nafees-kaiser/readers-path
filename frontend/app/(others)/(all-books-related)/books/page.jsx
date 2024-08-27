@@ -9,9 +9,9 @@ import {useFilter} from "@/utils/FilterDataContext";
 const BooksPage = () => {
 
     const filter = useFilter()
-    useEffect(() => {
-        console.log("inside page, ", filter)
-    });
+    // useEffect(() => {
+    //     console.log("inside page, ", filter)
+    // });
 
     const {data, isLoading, mutate} = useSWR(["/books/all", filter], bookFetcher);
     let books = data?.data;

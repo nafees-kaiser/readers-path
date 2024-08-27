@@ -28,7 +28,10 @@ const CategoryFilter = ({setIsCategoryModalOpen, apply}) => {
             <div className={"flex flex-col gap-3"}>
                 <div className={"flex justify-between items-center w-full"}>
                     <div className={"text-base font-bold"}>Category</div>
-                    <button className={"md:hidden"} onClick={() => setIsCategoryModalOpen(false)}>
+                    <button className={"md:hidden"} onClick={(e) => {
+                        e.preventDefault()
+                        setIsCategoryModalOpen(false)
+                    }}>
                         <div className={"text-xl"}>
                             <IoClose/>
                         </div>
@@ -49,7 +52,12 @@ const CategoryFilter = ({setIsCategoryModalOpen, apply}) => {
                 </div>
             </div>
             <Button
-                onClick={() => apply(categories)}
+                onClick={(e) => {
+                    e.preventDefault();
+                    apply(categories)
+                    if (setIsCategoryModalOpen) setIsCategoryModalOpen(false)
+                    // setIsCategoryModalOpen(false)
+                }}
                 className={"bg-secondary hover:bg-button-hover text-white"} content={"Apply"}/>
         </div>
     );
