@@ -12,25 +12,16 @@ const ProfileModal = () => {
     const {data} = useSWR("/user", fetcher)
     const user = data?.data
 
-    let reward = {}
-    const loadReward = async () => {
-        try {
-            const {data: rewardData} = await useSWR("/user/reward", fetcher)
-            reward = rewardData?.data
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    loadReward().then()
+    const {data: rewardData} = useSWR("/user/reward", fetcher)
+    const rw = rewardData?.data
+    console.log(rw)
 
     const logout = async () => {
         await signOut({
             callbackUrl: "/",
         })
     }
-    // useEffect(() => {
-    //     console.log(user)
-    // }, [user]);
+
     return (
         <div className={"w-52 bg-white rounded-lg  shadow-lg shadow-gray-700/30 p-4"}>
             <div className={"flex gap-2"}>
@@ -39,20 +30,20 @@ const ProfileModal = () => {
                     <p className={"font-bold"}>{user?.name}</p>
                     <p className={"text-light-text"}>{user?.email}</p>
                     <div className={"flex gap-4 items-center"}>
-                        <div className={"flex gap-1 text-xs md:text-sm text-light-text"}>
+                        <div className={"flex gap-1 text-xs md:text-sm text-light-text justify-center items-center"}>
                             <div className={"text-sm md:text-base"}>
                                 <IoBookOutline/>
                             </div>
-                            <div>{reward?.completedBooksCount ?
-                                reward?.completedBooksCount : 0
+                            <div>{rw?.completedBooksCount ?
+                                rw?.completedBooksCount : 0
                             }</div>
                         </div>
-                        <div className={"flex gap-1 text-xs md:text-sm text-light-text"}>
+                        <div className={"flex gap-1 text-xs md:text-sm text-light-text justify-center items-center"}>
                             <div className={"text-sm md:text-base"}>
                                 <BsCoin/>
                             </div>
-                            <div>{reward?.coins ?
-                                reward?.coins : 0
+                            <div>{rw?.coins ?
+                                rw?.coins : 0
                             }</div>
                         </div>
                     </div>

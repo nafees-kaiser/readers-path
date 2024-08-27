@@ -7,6 +7,7 @@ import com.readerspath.backend.repository.ReviewsAndRatingRepository;
 import com.readerspath.backend.service.AppUserService;
 import com.readerspath.backend.service.BookService;
 import com.readerspath.backend.service.ReviewsAndRatingService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class ReviewsAndRatingServiceImpl implements ReviewsAndRatingService {
     @Autowired
     private AppUserService appUserService;
 
+    @Transactional
     @Override
     public ReviewsAndRating addReview(ReviewsAndRating review) {
         AppUser appUser = appUserService.getAppUserFromSession();
@@ -32,6 +34,7 @@ public class ReviewsAndRatingServiceImpl implements ReviewsAndRatingService {
         return reviewsAndRating;
     }
 
+    @Transactional
     @Override
     public Boolean isAlreadyReviewed(Long id) {
         Book book = bookService.findBookById(id);

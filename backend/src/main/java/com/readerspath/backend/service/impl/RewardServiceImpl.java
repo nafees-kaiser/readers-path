@@ -7,6 +7,7 @@ import com.readerspath.backend.repository.RewardRepository;
 import com.readerspath.backend.service.AppUserService;
 import com.readerspath.backend.service.BookService;
 import com.readerspath.backend.service.RewardService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class RewardServiceImpl implements RewardService {
     @Autowired
     private AppUserService appUserService;
 
+    @Transactional
     @Override
     public Reward completeBook(Book book) {
         AppUser appUser = appUserService.getAppUserFromSession();
@@ -41,6 +43,7 @@ public class RewardServiceImpl implements RewardService {
                 .orElse(null);
     }
 
+    @Transactional
     @Override
     public Reward getReward() {
         AppUser appUser = appUserService.getAppUserFromSession();
