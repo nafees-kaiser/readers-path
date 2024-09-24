@@ -12,6 +12,8 @@ def preprocess_title(title):
 
 
 def content_based_filtering(df, title, num_of_books):
+    # books = pd.DataFrame(books, columns=['id', 'title', 'isbn', 'edition', 'publisher', 'page_count'])
+
     df['processed_title'] = df['title'].apply(preprocess_title)
 
     tfidf = TfidfVectorizer(stop_words='english')
@@ -27,5 +29,5 @@ def content_based_filtering(df, title, num_of_books):
     # print(indices)
     titles = df.iloc[indices[0][1:]]
     # print(titles)
-    return titles
+    return titles['id'].tolist()
 
