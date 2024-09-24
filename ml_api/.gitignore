@@ -1,0 +1,6 @@
+.env
+venv
+.idea
+data
+ignore_me.py
+__pycache__
