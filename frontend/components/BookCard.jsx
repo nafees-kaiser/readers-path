@@ -71,8 +71,8 @@ const BookCard = ({state, value, shelf}) => {
                         <div className={"text-secondary md:text-xl"}>
                             <FaStar/>
                         </div>
-                        <div>{value?.overAllRating ? value?.overAllRating : "0"} ({
-                            value?.reviewsAndRating ? value?.reviewsAndRating.length : "0"
+                        <div>{value?.overAllRating ? value?.overAllRating?.substring(0,4) : "0.0"} ({
+                            value?.reviewsCount ? value?.reviewsCount : "0"
                         })
                         </div>
                     </div>

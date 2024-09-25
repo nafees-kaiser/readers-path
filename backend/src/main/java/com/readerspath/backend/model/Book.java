@@ -35,12 +35,16 @@ public class Book extends BaseEntity<Long> {
     private List<LinksToBuy> links;
 
     //    @OneToMany(cascade = CascadeType.ALL)
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ReviewsAndRating> reviewsAndRating;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Questionaries> questionaries;
 
     private String overAllRating;
+
+    public Long getReviewsCount() {
+        return (long) reviewsAndRating.size();
+    }
 
 }

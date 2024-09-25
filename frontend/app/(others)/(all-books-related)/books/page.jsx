@@ -5,16 +5,17 @@ import {bookFetcher} from "@/utils/fetcher";
 import BookCard from "@/components/BookCard";
 import Link from "next/link";
 import {useFilter} from "@/utils/FilterDataContext";
+import Pagination from "@/components/Pagination";
 
 const BooksPage = () => {
 
-    const filter = useFilter()
+    const [filter, setFilterData] = useFilter()
     // useEffect(() => {
     //     console.log("inside page, ", filter)
     // });
 
-    const {data, isLoading, mutate} = useSWR(["/books/all", filter], bookFetcher);
-    let books = data?.data;
+    const {data, isLoading, error, mutate} = useSWR(["/books/all", filter], bookFetcher);
+    let books = data?.data?.content;
 
     const update = async () => {
         await mutate(data);
@@ -23,6 +24,24 @@ const BooksPage = () => {
     useEffect(() => {
         update().then()
     }, [filter]);
+
+    const pagination = (value) => {
+        const pageNumber = "pageNumber"
+
+        if (value) {
+            setFilterData((prevState) => ({
+                ...prevState,
+                [pageNumber]: (prevState.pageNumber + 1 === value) ? 0 : prevState.pageNumber + 1
+            }))
+        } else {
+            setFilterData((prevState) => ({
+                ...prevState,
+                [pageNumber]: (prevState.pageNumber === 0) ? 0 : prevState.pageNumber - 1
+            }))
+        }
+        update().then();
+
+    }
 
     return (
         <div className={"w-full flex flex-col gap-4"}>
@@ -36,6 +55,14 @@ const BooksPage = () => {
                     ))
                 }
             </div>
+            <Pagination
+                data={data?.data}
+                pagination={pagination}
+                isLoading={isLoading}
+                error={error}
+                // url={"/books/all"}
+                // toMutate={mutate}
+            />
 
         </div>
     );

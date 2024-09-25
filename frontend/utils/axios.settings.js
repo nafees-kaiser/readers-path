@@ -38,7 +38,7 @@ const bearerToken = async ({req}) => {
 };
 
 const axios = _axios.create({
-    timeout: 5000,
+    timeout: 60000,
     baseURL: baseUrl
 });
 

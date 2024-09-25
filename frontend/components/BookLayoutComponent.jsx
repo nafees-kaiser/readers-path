@@ -14,7 +14,8 @@ const BookLayoutComponent = ({children}) => {
     const [filterData, setFilterData] = useState({
         search: '',
         category: [],
-        sortBy: ''
+        sortBy: '',
+        pageNumber: 0
     });
 
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
@@ -38,15 +39,15 @@ const BookLayoutComponent = ({children}) => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        setFilterData(prevState => ({...prevState, search: searchText}))
+        setFilterData(prevState => ({...prevState, search: searchText, pageNumber: 0}))
     }
 
     const handleCategory = (cat) => {
-        setFilterData(prevState => ({...prevState, category: cat}))
+        setFilterData(prevState => ({...prevState, category: cat, pageNumber: 0}))
     }
 
     const handleSortBy = (s) => {
-        setFilterData(prevState => ({...prevState, sortBy: s}))
+        setFilterData(prevState => ({...prevState, sortBy: s, pageNumber: 0}))
     }
     return (
         <div className={"min-h-screen relative"}>
@@ -111,7 +112,7 @@ const BookLayoutComponent = ({children}) => {
                             </div>
                         </button>
                     </div>
-                    <FilterProvider v={filterData}>
+                    <FilterProvider v={filterData} setFilter={setFilterData}>
                         {children}
                     </FilterProvider>
                 </div>
