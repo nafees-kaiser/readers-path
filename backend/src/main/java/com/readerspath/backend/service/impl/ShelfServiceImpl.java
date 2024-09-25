@@ -33,7 +33,9 @@ public class ShelfServiceImpl implements ShelfService {
         shelf.setBook(book);
         shelf.setAppUser(appUser);
         shelf.setState(ShelfState.WISH_TO_READ);
-        return shelfRepository.save(shelf);
+        Shelf shelf1 = shelfRepository.save(shelf);
+        bookService.addRecommendation(book.getTitle(), 5);
+        return shelf1;
     }
 
     @Override

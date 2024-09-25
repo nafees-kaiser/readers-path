@@ -5,6 +5,7 @@ import java.util.List;
 public record BookFilterReq(
         String search,
         List<String> category,
-        String sortBy
+        String sortBy,
+        int pageNumber
 ) {
 }
