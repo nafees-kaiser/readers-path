@@ -16,7 +16,7 @@ import lombok.*;
         )
 })
 public class ReviewsAndRating extends BaseEntity<Long> {
-    // TODO: make appUser and book unique
+
     private String review;
     private String rating;
 
