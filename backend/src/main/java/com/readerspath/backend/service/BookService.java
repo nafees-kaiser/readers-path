@@ -37,4 +37,6 @@ public interface BookService {
     void addRecommendation(String title, int numOfBooks);
 
     Page<BookView> getRecBooks(BookFilterReq req);
+
+    List<BookView> getAdminBooks();
 }
