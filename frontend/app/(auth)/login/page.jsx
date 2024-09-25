@@ -19,7 +19,7 @@ const Page = () => {
             email: credentials.email,
             password: credentials.password,
             redirect: true,
-            callbackUrl: "/"
+            callbackUrl: "/redirect"
         })
     }
 

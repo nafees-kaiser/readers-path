@@ -10,8 +10,8 @@ const AdminNavLinks = ({className}) => {
                 content={"Home"}
             />
             <NavLink
-                address={"/admin/books"}
-                content={"View books"}
+                address={"/admin/add-category"}
+                content={"Add category"}
             />
             <NavLink
                 address={"/admin/add-book"}

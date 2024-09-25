@@ -23,9 +23,10 @@ const BookForm = ({
                           isbn: '',
                           category: {},
                           links: [],
-                      }
+                      },
+                      path="/my-books"
                   }) => {
-    const urlEdit = isUser ? '/user/my-books/edit' : '/admin/add-book'
+    const urlEdit = isUser ? '/user/my-books/edit' : '/admin/edit-book'
     const urlAdd = isUser ? '/user/add-book' : '/admin/add-book';
     const url = isEdit ? urlEdit : urlAdd;
     const headers = {
@@ -90,12 +91,13 @@ const BookForm = ({
             formData.append("book", new Blob([JSON.stringify(bookForm)], {type: 'application/json'}))
             if (image !== '') formData.append("coverImage", image)
             try {
+                // console.log(bookForm)
                 const res = await trigger(formData)
                 // console.log(res)
                 if (res.status === 201 || res.status === 200) {
                     toast.success(`Book ${isEdit ? 'edited' : 'added'} successfully!`);
                     setTimeout(() => {
-                        router.push("/my-books")
+                        router.push(path)
                     }, 1000)
                 }
             } catch (e) {

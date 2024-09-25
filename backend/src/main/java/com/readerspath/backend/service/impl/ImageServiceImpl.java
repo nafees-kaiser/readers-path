@@ -28,6 +28,10 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void editImage(Image coverImage, MultipartFile file) throws IOException {
+//        Image savedImage;
+//        if(coverImage==null){
+//            savedImage = saveImage(file);
+//        }
         Image image = imageRepository.findById(coverImage.getId()).orElse(null);
         if (image == null || file == null) {
             return;

@@ -11,6 +11,7 @@ import com.readerspath.backend.repository.BookRepository;
 import com.readerspath.backend.repository.LinksToBuyRepository;
 import com.readerspath.backend.repository.RecommendedBooksRepository;
 import com.readerspath.backend.service.*;
+import com.readerspath.backend.util.Convertion;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -225,7 +226,9 @@ public class BookServiceImpl implements BookService {
     private Author getAuthor(Map<String, Object> authorObj) {
         Author author = authorService.findAuthorByName((String) authorObj.get("name"));
         if (author == null) {
-            author = authorService.addAuthor(author);
+            Author author1 = new Author();
+            author1.setName((String) authorObj.get("name"));
+            author = authorService.addAuthor(author1);
         }
         return author;
     }
@@ -288,6 +291,18 @@ public class BookServiceImpl implements BookService {
             books = this.getAllBooks(req);
         }
         return books;
+    }
+
+    @Override
+    public List<BookView> getAdminBooks() {
+        List<Book> books = bookRepository.findAll();
+        List<Book> newBooks = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getAuthor().getAppUser() == null) {
+                newBooks.add(book);
+            }
+        }
+        return Convertion.convertToViewList(newBooks, BookView.class);
     }
 
     private void addToRecommendations(List<Long> bookIds) {

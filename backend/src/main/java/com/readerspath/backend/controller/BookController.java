@@ -117,11 +117,21 @@ public class BookController {
         try {
 //            System.out.println(req.toString());
             Page<BookView> books = bookService.getRecBooks(req);
-            return new ResponseEntity<>(books, HttpStatus.CREATED);
+            return new ResponseEntity<>(books, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
 
+    }
 
+    @GetMapping("/admin/books")
+    public ResponseEntity<?> getAdminBooks() {
+        try {
+//            System.out.println(req.toString());
+            List<BookView> books = bookService.getAdminBooks();
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }

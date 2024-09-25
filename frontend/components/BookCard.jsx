@@ -103,6 +103,19 @@ const BookCard = ({state, value, shelf}) => {
                     </div>
                 </div>
             )}
+            {state === 'admin' && (
+                <div className={"border-t border-divider pt-2 mt-2 h-8 relative"}
+                     onClick={(e) => e.stopPropagation()}>
+                    <div className={"flex items-center justify-start gap-1.5 absolute right-0 bottom-0"}>
+                        <button className={'text-xl md:text-2xl text-light-text '}
+                                onClick={() => router.push(`/admin/edit-book/${value?.id}`)}
+                        >
+                            <FiEdit/>
+                        </button>
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
