@@ -1,9 +1,10 @@
 package com.readerspath.backend.repository.impl;
 
+import com.readerspath.backend.model.AppUser;
 import com.readerspath.backend.model.Book;
 import com.readerspath.backend.model.BookFilterReq;
 import com.readerspath.backend.projection.BookView;
-import com.readerspath.backend.repository.BookFilterCustomRepository;
+import com.readerspath.backend.repository.RecBookFilterCustomRepository;
 import com.readerspath.backend.util.Convertion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,15 +16,20 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public class BookFilterCustomRepositoryImpl implements BookFilterCustomRepository {
+public class RecBookFilterCustomRepositoryImpl implements RecBookFilterCustomRepository {
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public Page<BookView> filterBooks(BookFilterReq req) {
+    public Page<BookView> filterBooks(BookFilterReq req, AppUser appUser) {
         Pageable pageable = PageRequest.of(req.pageNumber(), 10);
         StringBuilder query = new StringBuilder();
-        String sql = "SELECT b FROM Book b INNER JOIN Category c ON c.id = b.category.id INNER JOIN Author a ON a.id = b.author.id";
+        String sql = "SELECT b FROM RecommendedBooks r " +
+                "INNER JOIN r.books b " +
+                "INNER JOIN AppUser a ON r.appUser.id = a.id " +
+                "INNER JOIN Category c ON c.id = b.category.id " +
+                "INNER JOIN Author au ON au.id = b.author.id " +
+                "WHERE a.id = :appUser";
 
         boolean isCategoryNotNull = req.category() != null && !req.category().isEmpty();
         boolean isSearchNotNull = req.search() != null && !req.search().isEmpty();
@@ -33,19 +39,17 @@ public class BookFilterCustomRepositoryImpl implements BookFilterCustomRepositor
         String search = " (lower(b.title)) LIKE :search OR (lower(c.name)) LIKE :search OR (lower(a.name)) LIKE :search";
 
         if (isCategoryNotNull) {
-            query.append(" WHERE").append(category);
+            query.append(" AND").append(category);
         }
 
         if (isSearchNotNull) {
-            if (isCategoryNotNull) {
-                query.append(" AND").append(search);
-            } else {
-                query.append(" WHERE").append(search);
-            }
+            query.append(" AND").append(search);
+
         }
 
-        TypedQuery<Long> totalQuery = em.createQuery("SELECT COUNT(b) FROM Book b INNER JOIN Category c ON c.id = b.category.id  INNER JOIN Author a ON a.id = b.author.id" + query, Long.class);
-        populateParams(totalQuery, req, isCategoryNotNull, isSearchNotNull);
+        TypedQuery<Long> totalQuery = em.createQuery(
+                "SELECT COUNT(b) FROM RecommendedBooks r INNER JOIN r.books b INNER JOIN AppUser a ON r.appUser.id = a.id INNER JOIN Category c ON c.id = b.category.id INNER JOIN Author au ON au.id = b.author.id WHERE a.id = :appUser" + query, Long.class);
+        populateParams(totalQuery, req, isCategoryNotNull, isSearchNotNull, appUser);
         Long total = totalQuery.getSingleResult();
 
         if (isSortByNotNull && req.sortBy().equals("rating")) {
@@ -55,16 +59,29 @@ public class BookFilterCustomRepositoryImpl implements BookFilterCustomRepositor
         }
 
         TypedQuery<Book> typedQuery = em.createQuery(sql + query, Book.class);
-        populateParams(typedQuery, req, isCategoryNotNull, isSearchNotNull);
+//        TypedQuery<Object> typedQuery = em.createQuery(sql + query, Object.class);
+        populateParams(typedQuery, req, isCategoryNotNull, isSearchNotNull, appUser);
+
         typedQuery.setFirstResult((int) pageable.getOffset());
         typedQuery.setMaxResults(pageable.getPageSize());
+//        List<Object> results = typedQuery.getResultList();
+//        List<Book> books = results.stream()
+//                .filter(obj -> obj instanceof Book)
+//                .map(obj -> (Book) obj)
+//                .toList();
         List<Book> books = typedQuery.getResultList();
         List<BookView> bookViews = Convertion.convertToViewList(books, BookView.class);
 
         return new PageImpl<>(bookViews, pageable, total);
+//        return null;
     }
 
-    private void populateParams(TypedQuery<?> typedQuery, BookFilterReq req, Boolean isCategoryNotNull, Boolean isSearchNotNull) {
+    private void populateParams(TypedQuery<?> typedQuery,
+                                BookFilterReq req,
+                                Boolean isCategoryNotNull,
+                                Boolean isSearchNotNull,
+                                AppUser appUser) {
+        typedQuery.setParameter("appUser", appUser.getId());
 
         if (isCategoryNotNull) {
             typedQuery.setParameter("category", req.category());
@@ -73,27 +90,4 @@ public class BookFilterCustomRepositoryImpl implements BookFilterCustomRepositor
             typedQuery.setParameter("search", "%" + req.search().trim().toLowerCase() + "%");
         }
     }
-
 }
-/*
-category,
-search
-sortBy
- */
-
-/*
-select b from
-book b inner join category c on c.id = b.category.id
-where c.name = :category and
-b.title like :search
-order by b.overAllRating asc, b.title asc
-[order by b.title asc]
-
-SELECT b FROM
-book b INNER JOIN category c ON c.id = b.category.id
-WHERE c.name = :category
-AND b.title LIKE :search
-ORDER BY b.overAllRating ASC, b.title ASC
-[ORDER BY b.title ASC]
-
- */

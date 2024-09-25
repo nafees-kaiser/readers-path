@@ -8,6 +8,7 @@ import com.readerspath.backend.service.BookService;
 import com.readerspath.backend.util.Convertion;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class BookController {
     public ResponseEntity<?> getAllBooks(@RequestBody BookFilterReq req) {
         try {
 //            System.out.println(req.toString());
-            List<BookView> books = bookService.getAllBooks(req);
+            Page<BookView> books = bookService.getAllBooks(req);
             return new ResponseEntity<>(books, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -108,5 +109,18 @@ public class BookController {
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/user/get-rec")
+    public ResponseEntity<?> getRecBook(@RequestBody BookFilterReq req) {
+        try {
+//            System.out.println(req.toString());
+            Page<BookView> books = bookService.getRecBooks(req);
+            return new ResponseEntity<>(books, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 }
