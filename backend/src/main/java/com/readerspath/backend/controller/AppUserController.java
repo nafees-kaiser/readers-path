@@ -18,6 +18,16 @@ public class AppUserController {
     @Autowired
     private AppUserService appUserService;
 
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody AppUser appUser) {
+        try {
+            appUserService.addAppUser(appUser);
+            return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AppUser appUser) {
         try {
