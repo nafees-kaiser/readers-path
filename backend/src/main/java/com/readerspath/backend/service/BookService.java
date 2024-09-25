@@ -4,6 +4,7 @@ import com.readerspath.backend.model.Book;
 import com.readerspath.backend.model.BookFilterReq;
 import com.readerspath.backend.model.Category;
 import com.readerspath.backend.projection.BookView;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 public interface BookService {
     Book addBook(Book book, MultipartFile file) throws IOException;
 
-    List<BookView> getAllBooks(BookFilterReq req);
+    Page<BookView> getAllBooks(BookFilterReq req);
 
     Book findBookById(Long bookId);
 
@@ -30,4 +31,10 @@ public interface BookService {
     Book editBook(Map<String, Object> updates, MultipartFile file) throws IOException;
 
     Boolean isMyBook(Long id);
+
+//    void addRecommendation();
+
+    void addRecommendation(String title, int numOfBooks);
+
+    Page<BookView> getRecBooks(BookFilterReq req);
 }

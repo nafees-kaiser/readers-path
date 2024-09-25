@@ -1,25 +1,35 @@
 package com.readerspath.backend.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readerspath.backend.exception.BookAddFailedException;
 import com.readerspath.backend.exception.BookNotFoundException;
 import com.readerspath.backend.model.*;
 import com.readerspath.backend.projection.BookView;
 import com.readerspath.backend.repository.BookRepository;
 import com.readerspath.backend.repository.LinksToBuyRepository;
+import com.readerspath.backend.repository.RecommendedBooksRepository;
 import com.readerspath.backend.service.*;
-import com.readerspath.backend.util.Convertion;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class BookServiceImpl implements BookService {
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private final WebClient mLWebClient;
     @Autowired
     private BookRepository bookRepository;
 
@@ -37,6 +47,13 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private RecommendedBooksRepository recommendedBooksRepository;
+
+    public BookServiceImpl(WebClient mLWebClient) {
+        this.mLWebClient = mLWebClient;
+    }
 
     private List<LinksToBuy> addLinksToBuy(List<LinksToBuy> linksToBuyList) {
         return linksToBuyList.stream().map(link -> {
@@ -85,9 +102,10 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public List<BookView> getAllBooks(BookFilterReq req) {
-        List<Book> books = bookRepository.filterBooks(req);
-        return Convertion.convertToViewList(books, BookView.class);
+    public Page<BookView> getAllBooks(BookFilterReq req) {
+        return bookRepository.filterBooks(req);
+
+//        return Convertion.convertToViewList(books, BookView.class);
     }
 
     @Transactional
@@ -224,6 +242,77 @@ public class BookServiceImpl implements BookService {
             linksToBuy.add(newLink);
         });
         return linksToBuy;
+    }
+
+    @Override
+    public void addRecommendation(String title, int numOfBooks) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("title", title);
+        data.put("num_of_books", numOfBooks);
+
+        String responseString = mLWebClient
+                .post()
+                .uri("/ml/get-recommendations")
+                .bodyValue(data)
+                .exchangeToMono(r -> {
+                    if (r.statusCode().equals(HttpStatus.OK)) {
+                        return r.bodyToMono(String.class);
+                    } else if (r.statusCode().is4xxClientError()) {
+                        return Mono.just("Error response");
+                    } else {
+                        return r.createException()
+                                .flatMap(Mono::error);
+                    }
+                })
+                .block();
+
+        List<Long> bookIds = new ArrayList<>();
+        try {
+            bookIds = mapper.readValue(responseString, new TypeReference<List<Long>>() {
+            });
+            this.addToRecommendations(bookIds);
+//            System.out.println(bookIds);
+            // Now bookIds contains the list of Longs
+        } catch (JsonProcessingException e) {
+            throw new BookNotFoundException("Recommended books not found");
+        }
+
+    }
+
+    @Override
+    public Page<BookView> getRecBooks(BookFilterReq req) {
+        AppUser appUser = appUserService.getAppUserFromSession();
+
+        Page<BookView> books = recommendedBooksRepository.filterBooks(req, appUser);
+        if (books.getTotalElements() == 0) {
+            books = this.getAllBooks(req);
+        }
+        return books;
+    }
+
+    private void addToRecommendations(List<Long> bookIds) {
+        if (bookIds != null && !bookIds.isEmpty()) {
+            AppUser appUser = appUserService.getAppUserFromSession();
+            RecommendedBooks rec = recommendedBooksRepository.findByAppUser(appUser);
+            if (rec == null) {
+                rec = new RecommendedBooks();
+                rec.setAppUser(appUser);
+            }
+            List<Book> recBooks = rec.getBooks();
+            if (recBooks == null) {
+                recBooks = new ArrayList<>();
+            }
+            for (Long bookId : bookIds) {
+                Book book = this.findBookById(bookId);
+                if (!recBooks.contains(book)) {
+                    recBooks.add(book);
+                }
+
+            }
+            rec.setBooks(recBooks);
+            recommendedBooksRepository.save(rec);
+
+        }
     }
 
 }
