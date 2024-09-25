@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class AppUserServiceImpl implements AppUserService {
     @Autowired
@@ -75,6 +77,27 @@ public class AppUserServiceImpl implements AppUserService {
             throw new UserNotFoundException("User not found");
         }
         return appUser;
+    }
+
+    @Override
+    public AppUser editUser(Map<String, String> editQuery) {
+        AppUser appUser = this.getAppUserFromSession();
+
+        editQuery.forEach((key, value) -> {
+            if (value != null && !value.isEmpty()) {
+                switch (key) {
+                    case "email":
+                        appUser.setEmail(value);
+                        break;
+                    case "name":
+                        appUser.setName(value);
+                        break;
+                    default:
+                        throw new UserNotFoundException("Unable to edit user");
+                }
+            }
+        });
+        return appUserRepository.save(appUser);
     }
 
 
