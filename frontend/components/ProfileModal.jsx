@@ -14,7 +14,7 @@ const ProfileModal = () => {
 
     const {data: rewardData} = useSWR("/user/reward", fetcher)
     const rw = rewardData?.data
-    console.log(rw)
+    // console.log(rw)
 
     const logout = async () => {
         await signOut({
@@ -43,7 +43,7 @@ const ProfileModal = () => {
                                 <BsCoin/>
                             </div>
                             <div>{rw?.coins ?
-                                rw?.coins : 0
+                                rw?.coins : 20
                             }</div>
                         </div>
                     </div>

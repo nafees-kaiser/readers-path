@@ -48,4 +48,15 @@ public class AppUserController {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/user/edit-user")
+    public ResponseEntity<?> editUser(@RequestBody Map<String, String> editQuery) {
+        try {
+            AppUser appUser = appUserService.editUser(editQuery);
+            AppUserView appUserView = Convertion.covertToView(appUser, AppUserView.class);
+            return new ResponseEntity<>(appUserView, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
