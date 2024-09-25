@@ -32,6 +32,7 @@ public class SecurityConfig {
                                     "/api/v1/books/all",
                                     "/api/v1/books/{id}",
                                     "/api/v1/category",
+                                    "/api/v1/get-popular-books",
                                     "/api/v1/author").permitAll()
                             .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
                             .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")

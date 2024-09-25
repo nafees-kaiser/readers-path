@@ -134,4 +134,15 @@ public class BookController {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/get-popular-books")
+    public ResponseEntity<?> getPopularBooks() {
+        try {
+//            System.out.println(req.toString());
+            List<BookView> books = bookService.getPopularBooks();
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

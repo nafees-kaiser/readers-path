@@ -305,6 +305,16 @@ public class BookServiceImpl implements BookService {
         return Convertion.convertToViewList(newBooks, BookView.class);
     }
 
+    @Transactional
+    @Override
+    public List<BookView> getPopularBooks() {
+        List<Book> books = bookRepository.findAllByOrderByOverAllRatingAsc();
+        if (books.size() > 4) {
+            books = books.subList(0, 4);
+        }
+        return Convertion.convertToViewList(books, BookView.class);
+    }
+
     private void addToRecommendations(List<Long> bookIds) {
         if (bookIds != null && !bookIds.isEmpty()) {
             AppUser appUser = appUserService.getAppUserFromSession();

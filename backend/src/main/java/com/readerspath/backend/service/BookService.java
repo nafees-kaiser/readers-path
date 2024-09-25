@@ -39,4 +39,6 @@ public interface BookService {
     Page<BookView> getRecBooks(BookFilterReq req);
 
     List<BookView> getAdminBooks();
+
+    List<BookView> getPopularBooks();
 }
