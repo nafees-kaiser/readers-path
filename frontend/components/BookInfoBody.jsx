@@ -19,7 +19,7 @@ const BookInfoBody = ({value, isMyBook = false}) => {
                     <div className={"flex flex-col gap-2 items-center"}>
                         <div className={"flex items-end"}>
                             <div
-                                className={"text-lg md:text-xl font-bold"}>{value?.overAllRating ? value?.overAllRating : ""}/
+                                className={"text-lg md:text-xl font-bold"}>{value?.overAllRating ? value?.overAllRating.substring(0,4) : ""}/
                             </div>
                             <div className={"text-base md:text-lg"}>5 ({
                                 value?.reviewsAndRating ? value?.reviewsAndRating.length : "0"

@@ -2,17 +2,19 @@ import {createContext, useContext} from "react";
 
 const FilterContext = createContext();
 
-// const FilterUpdateContext = React.createContext(null);
+const FilterUpdateContext = createContext();
 
-export function FilterProvider({children, v}) {
+export function FilterProvider({children, v, setFilter}) {
     // const [filter, setFilter] = React.useState(v);
     return <FilterContext.Provider value={v}>
-        {/*<FilterUpdateContext.Provider value={setFilter}>*/}
+        <FilterUpdateContext.Provider value={setFilter}>
         {children}
-        {/*</FilterUpdateContext.Provider>*/}
+        </FilterUpdateContext.Provider>
     </FilterContext.Provider>;
 }
 
 export function useFilter() {
-    return useContext(FilterContext);
+    const filterData = useContext(FilterContext);
+    const setFilterData = useContext(FilterUpdateContext);
+    return [filterData, setFilterData];
 }

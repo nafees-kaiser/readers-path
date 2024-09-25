@@ -4,7 +4,7 @@ import com.readerspath.backend.model.Category;
 
 import java.util.List;
 
-public interface BookView {
+public interface SingleBookView {
     Long getId();
 
     String getTitle();
@@ -22,6 +22,10 @@ public interface BookView {
     Category getCategory();
 
     List<LinksToBuyView> getLinks();
+
+    List<ReviewsAndRatingView> getReviewsAndRating();
+
+    List<QuestionariesView> getQuestionaries();
 
     String getOverAllRating();
 

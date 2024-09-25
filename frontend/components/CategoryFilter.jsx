@@ -38,7 +38,7 @@ const CategoryFilter = ({setIsCategoryModalOpen, apply}) => {
                     </button>
                 </div>
 
-                <div className={"flex flex-col gap-2"}>
+                <div className={"flex flex-col gap-2 overflow-y-scroll"}>
                     {data?.data &&
                         data?.data?.map(cat => (
                             <CheckBox key={cat.id}

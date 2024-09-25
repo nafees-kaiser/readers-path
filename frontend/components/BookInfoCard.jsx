@@ -10,11 +10,14 @@ import {deleteFetcher, fetcher, postFetcher} from "@/utils/fetcher";
 import useSWR from "swr";
 import {useRouter} from "next/navigation";
 import {FiEdit} from "react-icons/fi";
+import {useSession} from "next-auth/react";
 
 const BookInfoCard = ({value, isMyBook}) => {
     const {data: shelfStatus} = useSWR(value?.id ? `/user/shelf/book-exists/${value?.id}` : null, fetcher)
     const router = useRouter()
     const [isShelf, setIsShelf] = useState(false);
+
+    const {session, status} = useSession();
 
     useEffect(() => {
         setIsShelf(shelfStatus?.data)
@@ -30,7 +33,11 @@ const BookInfoCard = ({value, isMyBook}) => {
         deleteFetcher)
 
     const handleShelf = async () => {
-        try {
+        if(status === "unauthenticated"){
+            router.push("/login")
+        }
+        else{
+            try {
             let res;
             if (isShelf) {
                 res = await removeFromShelf();
@@ -46,6 +53,8 @@ const BookInfoCard = ({value, isMyBook}) => {
         } catch (e) {
             console.error(e);
         }
+        }
+
     }
 
     const imageEncoded = value?.coverImage?.imageEncoded ? value?.coverImage?.imageEncoded : null;
@@ -85,7 +94,7 @@ const BookInfoCard = ({value, isMyBook}) => {
                         <div className={"text-secondary text-sm md:text-xl"}>
                             <FaStar/>
                         </div>
-                        <div>{value?.overAllRating ? value?.overAllRating : "0"} ({
+                        <div>{value?.overAllRating ? value?.overAllRating.substring(0, 4) : "0"} ({
                             value?.reviewsAndRating ? value?.reviewsAndRating.length : "0"
                         })
                         </div>

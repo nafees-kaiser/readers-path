@@ -4,6 +4,7 @@ import com.readerspath.backend.model.Book;
 import com.readerspath.backend.model.BookFilterReq;
 import com.readerspath.backend.model.Category;
 import com.readerspath.backend.projection.BookView;
+import com.readerspath.backend.projection.SingleBookView;
 import com.readerspath.backend.service.BookService;
 import com.readerspath.backend.util.Convertion;
 import jakarta.annotation.Nullable;
@@ -40,7 +41,7 @@ public class BookController {
     public ResponseEntity<?> getBookById(@PathVariable("bookId") Long bookId) {
         try {
             Book book = bookService.findBookById(bookId);
-            BookView bookView = Convertion.covertToView(book, BookView.class);
+            SingleBookView bookView = Convertion.covertToView(book, SingleBookView.class);
             return new ResponseEntity<>(bookView, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
