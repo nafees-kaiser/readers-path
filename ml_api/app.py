@@ -18,7 +18,8 @@ def get_db_connection():
                             user=os.getenv('USER_NAME'),
                             password=os.getenv('PWD'),
                             host=os.getenv('DB_HOST'),
-                            port=os.getenv('DB_PORT')
+                            port=os.getenv('DB_PORT'),
+                            sslmode='require'
                             )
     cur = conn.cursor()
     return conn, cur
