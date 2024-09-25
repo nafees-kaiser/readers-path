@@ -147,7 +147,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateOverAllRating(Book book) {
         List<ReviewsAndRating> reviewsAndRatings = book.getReviewsAndRating();
-        if (reviewsAndRatings != null && !reviewsAndRatings.isEmpty()) {
+
+        if (reviewsAndRatings != null) {
             Double avg = 0.0;
             for (ReviewsAndRating r : reviewsAndRatings) {
                 avg += Double.parseDouble(r.getRating());
@@ -308,7 +309,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public List<BookView> getPopularBooks() {
-        List<Book> books = bookRepository.findAllByOrderByOverAllRatingAsc();
+        List<Book> books = bookRepository.findAllByOrderByOverAllRatingDesc();
         if (books.size() > 4) {
             books = books.subList(0, 4);
         }
