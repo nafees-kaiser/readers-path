@@ -44,7 +44,11 @@ public class Book extends BaseEntity<Long> {
     private String overAllRating;
 
     public Long getReviewsCount() {
-        return (long) reviewsAndRating.size();
+        if (reviewsAndRating == null) return 0L;
+        else {
+            return (long) reviewsAndRating.size();
+        }
+
     }
 
 }

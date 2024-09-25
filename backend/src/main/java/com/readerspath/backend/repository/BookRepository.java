@@ -11,5 +11,5 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long>, BookFilterCustomRepository {
     List<Book> findAllByAuthor(Author author);
 
-    List<Book> findAllByOrderByOverAllRatingAsc();
+    List<Book> findAllByOrderByOverAllRatingDesc();
 }
