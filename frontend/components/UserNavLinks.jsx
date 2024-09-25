@@ -17,10 +17,10 @@ const UserNavLinks = ({className}) => {
                 address={"/rec-books"}
                 content={"Recommended"}
             />
-            <NavLink
-                address={"#about-us"}
-                content={"About us"}
-            />
+            {/*<NavLink*/}
+            {/*    address={"#about-us"}*/}
+            {/*    content={"About us"}*/}
+            {/*/>*/}
         </ul>
     );
 };

@@ -5,11 +5,16 @@ import navbarLogo from "../public/logo_name_white.svg"
 import Link from "next/link";
 import {IoMenu} from "react-icons/io5";
 import AdminNavLinks from "@/components/AdminNavLinks";
-import {useSession} from "next-auth/react";
+import {signOut, useSession} from "next-auth/react";
 
 const AdminNavbar = ({isLoggedIn = false}) => {
     const [navBar, setNavBar] = useState(false);
     const {session, status} = useSession();
+    const logout = async () => {
+        await signOut({
+            callbackUrl: "/",
+        })
+    }
     return (
         <nav className={""}>
             <div className={"bg-primary flex justify-between py-4 text-white px-[10px] md:px-[50px] lg:px-[100px]"}>
@@ -20,11 +25,19 @@ const AdminNavbar = ({isLoggedIn = false}) => {
                     <AdminNavLinks className={'flex md:gap-4 m-auto lg:gap-8'}/>
                 </div>
                 <div className={"flex gap-1.5"}>
-                    {status === "unauthenticated" && (
+                    {status === "unauthenticated" ? (
                         <div>
                             <Link className={"hover:underline text-sm md:text-base"} href={"/register"}>Register</Link>
                         </div>
 
+                    ): (
+                        <div>
+                            <button
+                                onClick={()=>logout().then()}
+                                className={"hover:underline text-sm md:text-base cursor-pointer"}>
+                                Logout
+                            </button>
+                        </div>
                     )}
                     <div className={"md:hidden"}>
                         <button onClick={() => setNavBar(!navBar)}>
